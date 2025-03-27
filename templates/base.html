@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block Title %}{% endblock Title %}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+      .custom-bg {
+        background-color: #0A1128; 
+      }
+
+      product-card .product-card:hover {
+        transform: scale(1.05);
+    }
+      {% block CustomCSS %}
+
+      {% endblock CustomCSS %}
+    </style>
+</head>
+
+<body class="custom-bg text-white">
+  
+  <header class="sticky-top p-3">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary rounded" data-bs-theme="dark">
+      <div class="container-fluid">
+
+        <a class="navbar-brand fw-bold fs-1" href="/">
+          <i class="fa-brands fa-cotton-bureau fa-spin"></i>
+          Sami's Projects
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <li class="nav-item">
+              <a class="nav-link active fw-bold fs-5" aria-current="page" href="/">Home</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active fw-bold fs-5" aria-current="page" href="/projects">Projects</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active fw-bold fs-5" aria-current="page" href="/dashboard">Dashboard</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link fw-bold fs-5" href="/blog/exploreblog">Blog</a>
+            </li>
+
+            <li class="nav-item dropdown">
+
+              <a class="nav-link dropdown-toggle fw-bold fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                More
+              </a>
+
+              <ul class="dropdown-menu">
+                {% if user.is_authenticated and user.is_verified %}
+                <li><a class="dropdown-item" href="/projects/myprojects">My Projects</a></li>
+                <li><a class="dropdown-item" href="/projects/registerproject/">Register a Project</a></li>
+                {% elif user.is_authenticated and user.is_verified == 0 %}
+                <li><a class="dropdown-item" href="/verifyemail/">My Projects<small class="fs6">(Verify)</small></a></li>
+                <li><a class="dropdown-item" href="/verifyemail/">Register a Project <small>(verify)</small></a></li>
+                {% else %}
+                <li><a class="dropdown-item" href="/login/">My Projects<small class="fs6">(Login first)</small></a></li>
+                <li><a class="dropdown-item" href="/login/">Register a Project <small>(Login first)</small></a></li>
+                {% endif %}
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Announcement</a></li>
+                <li><a class="dropdown-item" href="https://unsplash.com/">Support Unsplace</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/admin">Admin Page</a></li>
+                <li><a class="dropdown-item" href="/aboutus">About Us</a></li>
+                <li><a class="dropdown-item" href="/contactus">Contact Us</a></li>
+              </ul>
+
+            </li>
+            <li class="nav-item disable">
+              <form class="d-flex" action="{% url 'SearchUrl'%}" method='GET' role="search">
+                <input class="form-control me-2" name="query" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+            </li>
+            
+
+          </ul>
+
+          <a class=" fs-5 d-flex align-items-center justify-content-center nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% if user.is_authenticated %}
+            <span class="m-2">{{request.user.first_name}}</span>
+            {% endif %}
+            <i class="fa-regular fa-circle-user fa-2x"></i>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/profile/">Profile</a></li>
+            <li><a class="dropdown-item " href="#">History</a></li>
+            <li><hr class="dropdown-divider"></li>
+            {% if user.is_authenticated %}
+            <li><a class="dropdown-item" href="/logout/">Logout</a></li>
+            {% else %}
+            <li><a class="dropdown-item" href="/login/">Login</a></li>
+            <li><a class="dropdown-item" href="/createaccount/">Create Account</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  {% if Announcements %}
+    <marquee behavior="" class="bg-primary text-white p-2 rounded shadow fw-bold" direction="">{{Announcements}}<a href="https://unsplash.com/">Support Unsplace</a></marquee>
+  {% endif %}
+
+  {% if messages %}
+  {% for message in messages %}
+  <div class="my-2 mx-3 alert alert-warning" role="alert">
+      {{message}}
+  </div>
+  {% endfor %}
+  {% endif %}
+  <main class="rounded p-1">
+    
+      {% block MainDiv %}
+        <!--main Div Will be added from other files-->
+      {% endblock MainDiv %}
+      
+  </main>
+<a href=""></a>
+  <footer>
+    
+    <div class="container my-5">
+      <div class="faq-section text-center">
+          <h2 class="fw-bold">Info.</h2>
+          <div class="accordion mt-4" id="faqAccordion">
+              <div class="accordion-item">
+                  <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                          What is Sami-Projects?
+                      </button>
+                  </h2>
+                  <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                          Sami Projects is a plartform where I manage all my projects.
+                      </div>
+                  </div>
+              </div>
+              <div class="accordion-item">
+                  <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                          Why we use Sami-Projects?
+                      </button>
+                  </h2>
+                  <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                          ----------
+                      </div>
+                  </div>
+              </div>
+              <div class="accordion-item">
+                  <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                          What limitations does Sami-Projects have?
+                      </button>
+                  </h2>
+                  <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                          You can use the products for free but cannot use for illgal or bad purpuse.
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="container text-center">  
+      <div>
+          <a href="#" class="text-light mx-2"><i class="fab fa-github fa-2x"></i></a>
+          <a href="#" class="text-light mx-2"><i class="fab fa-facebook fa-2x"></i></a>
+          <a href="#" class="text-light mx-2"><i class="fab fa-instagram fa-2x"></i></a>
+          <a href="#" class="text-light mx-2"><i class="fab fa-linkedin fa-2x"></i></a>
+      </div>
+      <p class="mb-1">© 2025 Sam-Projects. All Rights Reserved.</p>
+  </div>
+  </footer>
+
+
+</body>
+</html>

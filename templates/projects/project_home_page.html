@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block Title %}Projects - Home{% endblock Title %}
+
+{% block CustomCSS %}
+
+.container-custom {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    color: white;
+    overflow: hidden;
+}
+
+/* Blurred background effect */
+.container-custom::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://plus.unsplash.com/premium_photo-1675714692786-22ad175c9a76?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center/cover;
+    filter: blur(5px);
+    z-index: -1;
+}
+
+.text-section {
+    flex: 1;
+    padding: 20px;
+}
+
+.buttons-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.btn-custom {
+    width: 150px;
+    height: 75px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(163, 149, 149, 0.2);
+    color: white;
+    transition: 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+/*----------------------------------------------------------------------------------------------------*/
+
+
+.category-container {
+    position: relative;
+    
+    margin: 10px 0px;
+    padding: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* Blurred Background */
+.category-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://plus.unsplash.com/premium_vector-1739819773603-1a1122525d97?q=80&w=2148&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')  center center/cover;
+    filter: blur(8px);
+    z-index: -1;
+}
+
+/* Category Header */
+.category-header {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+}
+
+
+
+
+.product-card {
+    transition: transform 0.3s ease-in-out;
+}
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+
+.see-all-btn {
+    width: 50px;
+    height: 50px;
+    background: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 1.5rem;
+    transition: 0.3s;
+    background: gray;
+}
+
+.see-all-btn p{
+    font-size:10px
+}
+
+.see-all-btn:hover {
+    
+    color: black;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+/*----------------------------------------------------------------------------*/
+
+
+{% endblock CustomCSS %}
+
+
+
+
+
+
+{% block MainDiv %}
+
+<div class="container-custom">
+    <div class="text-section">
+        <h3><strong>Top Projects</strong></h3>
+        <p>Most demanded Projects.</p>
+    </div>
+    <div class="buttons-section">
+        <button class="btn-custom">Btn 1</button>
+        <button class="btn-custom">Btn 2</button>
+        <button class="btn-custom">Btn 3</button>
+        <button class="btn-custom">Btn 4</button>
+        <button class="btn-custom">Btn 5</button>
+        <button class="btn-custom">Btn 6</button>
+    </div>
+</div>
+
+
+
+<div class="container">
+
+    {% for category,projects in project_data %}
+        <!-- Category Header -->
+        <div class="category-header mt-3 ms-3 fs-2 ">{{forloop.counter}}. {{category}}</div>
+        <!-- Product Cards -->
+        <div class="container">
+            <div class="category-container">
+                <div class="row mt-3 mb-3">
+                    {% for item in projects %}
+                    <div class="col-md-3 mt-3 product-card shadow-sm">
+                        <a class="text-decoration-none" href="/projects/projectoverview/{{item.id}}">
+                            <div class="card">
+                                <div class="card-body"> 
+                                <div class="d-flex justify-content-between">
+                                    <Span>
+                                        User:<h6 >{{item.nickname}}</h6>
+                                    </Span>
+                                    <Span>
+                                        Status:<h6 >{{item.project_status}}</h6>
+                                    </Span>
+                                </div>
+                                <img src="{{item.project_external_image}}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Product Image">
+                                
+                                <h5 class="card-title">{{item.project_name}}</h5>
+                                    <p class="card-text">{{item.project_description | truncatechars:25}}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+
+                    <div class="col-md-3 mt-3 d-flex justify-content-center align-items-center">
+                        <a href="{% url 'AllProjects' category_id=category.id %}" class="see-all-btn" data-bs-toggle="tooltip"  title="See All">&rarr;</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock MainDiv %}

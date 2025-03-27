@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+
+{% block PageTitle %}Verify Email{% endblock PageTitle %}
+
+
+{% block MainDiv %}
+
+<div class="fs-5 d-flex align-items-center justify-content-center ">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 ">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <h3 class="text-center mb-4">Verify Your Account to Heavenly Bytes</h3>
+
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="Email" class="form-label"><strong>Email:</strong></label>
+                                {{request.user.email}}
+                            </div>
+                            <div class="mb-3">
+                                <label for="OTP" class="form-label">OTP</label>
+                                <input name="OTP" type="OTP" class="form-control" id="OTP" placeholder="Enter your OTP" required>
+                            </div>
+                            <div class="d-grid">
+                                <button name="OTP_SUBMISSION" type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock MainDiv %}

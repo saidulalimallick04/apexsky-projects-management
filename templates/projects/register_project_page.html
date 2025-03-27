@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block CustomCSS %}
+
+
+
+{% endblock CustomCSS %}
+
+{% block MainDiv %}
+
+<section class=" container">
+    <h2 class="text-center mb-4">Register Your Project</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card shadow p-4">
+                <form method='post'>
+                    {% csrf_token %}
+
+                    <!-- Email -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Display Name: </label>
+                            <input type="name" value={{user.nickname}} disabled class="form-control" id="name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email: </label>
+                            <input type="email" value={{user.email}} disabled class="form-control" id="email">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label for="project-name" class="form-label">Project Name <small>(max.length 50)</small></label>
+                        <input type="text" class="form-control" id="project-name" name="Project_Name" required>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="about-me" class="form-label">About The Project <small>(max.length 150)</small></label>
+                        <textarea type="text" class="form-control" id="about-me" name="About_Project"></textarea>
+                    </div>
+                    
+                    <hr class="mt-3 mb-3">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="Gender" class="form-label">Category</label>
+                            <select name="Category" class="form-select" id="Category" required>
+                                <option selected disabled>Choose...</option>
+                                {% for category in categories %}
+                                    <option value="{{category.category_name}}">{{category.category_name}}</option>
+                                {% endfor %}
+                                
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Status" class="form-label">Project Status</label>
+                            <select name="Status" class="form-select" id="Status" required>
+                                <option selected disabled>Choose...</option>
+                                <option value="Comming Soon">Comming Soon</option>
+                                <option value="Incompleted">Incompleted</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Live">Live</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label for="document-file" class="form-label">Project Documentation(pdf,docs)</label>
+                            <input type="text" class="form-control" Disabled placeholder="Currently not Accepetable"  id="document-file">
+                            {% comment %} <input type="file" class="form-control" disabled id="document-file" name="Document_File"> {% endcomment %}
+                        </div>
+                    </div>
+                    <hr class="mt-3 mb-3">
+
+                    <!-- Project Url -->
+                    <div class="mb-3">
+                        <label for="project-url" class="form-label">Project Url</label>
+                        <input type="project-url" class="form-control" id="project-url" name="Project_Url" >
+                    </div>
+                    <!-- Repo Url -->
+                    <div class="mb-3">
+                        <label for="git-repo" class="form-label">Project Github Repository</label>
+                        <input type="git-repo" class="form-control" id="git-repo" name="Github_Repository" >
+                    </div>
+                    
+                    <hr class="mt-3 mb-3">
+                    <!-- Password & Confirm Password -->
+                    
+
+                    <!-- Sign Up Button -->
+                    <div class="d-grid">
+                        <button name="RegisterProject" type="submit" class="btn btn-primary">Register</button>
+                    </div> 
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock MainDiv %}
+
+

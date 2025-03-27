@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block Title %}{{item.name}}{% endblock %}
+
+
+{% block CustomCSS %}
+
+main {
+    background-color:rgb(55, 105, 107); /* Custom Background Color */
+    color: white;
+}
+.overview-section {
+    padding: 60px 0;
+}
+.overview-content h2 {
+    font-weight: bold;
+}
+
+.info-box {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+.info-box h3 {
+    color: #5f9ea0;
+    font-weight: bold;
+}
+
+{% endblock CustomCSS %}
+
+
+
+<!---------------------------------------------------------->
+
+{% block MainDiv %}
+
+<div class="d-flex p-5 justify-content-between align-item-center">
+    <span class="border border-warning-subtle p-5"><strong>Intrest Count: </strong> {{project.project_use_count}}</span>
+    <span class="border border-warning-subtle p-5"><strong>Category: </strong> {{project.category}}</span>
+    <span class="border border-warning-subtle p-5"><strong>Status: </strong>{{project.project_status}}</span>
+
+</div>
+<section class="overview-section text-center">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Project : Image -->
+            <div class="col-md-6" style="object-fit: cover;">
+                <img src="{{project.project_external_image}}" class="img-fluid rounded" style="object-fit: cover;"  alt="Product Image">
+            </div>
+            <!-- Right Side: Details -->
+            <div class="col-md-6 overview-content text-start">
+                <h2>{{project.project_name}}</h2>
+                <p>{{project.project_description}}</p>
+
+                <a href="{{project.project_url}}" class="btn btn-primary">Project Page</a>
+
+                {% if request.user.is_verified %}
+                <a href="{{project.project_github_repo}}" class="btn btn-primary">Github Repository</a>
+                {% else %}
+
+                <button type="button" class="btn btn-primary" id="liveToastBtn">Show Repository</button>
+
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="liveToast" class="toast bg-dark" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">Login Required</strong>
+                            <small>Only users can access</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            Login First!!
+                        </div>
+                </div>
+                </div>
+                {% endif %}
+                <br>
+                {% if project.user == user %}
+                    <a href="{%url 'EditProject' project.id %}" class="btn mt-3 btn-secondary">Edit Project Details</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Three Info Boxes -->
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="mt-2 info-box text-center">
+                    <h3>01</h3>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
+                </div>
+            </div>
+            <div class="mt-2 col-md-4">
+                <div class="info-box text-center">
+                    <h3>02</h3>
+                    <p>Exceptuer sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.</p>
+                </div>
+            </div>
+            <div class="mt-2 col-md-4">
+                <div class="info-box text-center">
+                    <h3>03</h3>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const toastTrigger = document.getElementById('liveToastBtn')
+const toastLiveExample = document.getElementById('liveToast')
+
+if (toastTrigger) {
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+  toastTrigger.addEventListener('click', () => {
+    toastBootstrap.show()
+  })
+}
+</script>
+
+{% endblock MainDiv %}

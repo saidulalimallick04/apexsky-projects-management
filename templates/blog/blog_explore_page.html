@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block Title %}Heavenly Blog{% endblock Title %}
+
+{% block CustomCSS %}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;    
+}
+
+{% endblock CustomCSS %}
+
+
+
+
+<!---------------------------------------------------------->
+
+{% block MainDiv %}
+
+<div  class="container p-3 rounded bg-dark d-flex flex-wrap align-items-end justify-content-center" >
+    <div>
+        <div>
+            <div class="d-flex align-items-center">
+                <img class="rounded-circle img-fluid me-3" style="width: 25px; height: 25px; object-fit: cover;" alt="Profile Image" src="https://plus.unsplash.com/premium_photo-1692805434290-21537c51f35b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                <a href="#" class="text-decoration-none "><strong class="fs-3">Saidul</strong></a>
+                <small class="ms-3">12.02.2025</small>
+            </div>
+        </div>
+        <div class="card rounded " style="width: 18rem;">
+            <img src="https://plus.unsplash.com/premium_photo-1692805434290-21537c51f35b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="flex-shrink-1 card-img-top" alt="...">
+        </div>
+    </div>
+<!--------------->
+    <div style="height: 200px;;" class="card ms-3 flex-grow-1">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text ">With supporting text below as a natural lead-in to additional content.</p>
+            <a href="#" class="btn btn-primary">Button</a>
+        </div>
+        
+</div>
+
+{% endblock MainDiv %}

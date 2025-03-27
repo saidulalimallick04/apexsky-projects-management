@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+
+{% block Title %}{{QUERY}} -Search{% endblock Title %}
+
+{% block CustomCSS %}
+.tab:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+.tab-content {
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    position: absolute;
+    width: 100%;
+}
+.tab-content.active {
+    transform: translateX(0);
+    opacity: 1;
+    position: relative;
+}
+{% endblock CustomCSS %}
+
+
+{% block MainDiv %}
+
+
+
+
+<div class="bg-gray-900 text-white h-screen flex flex-col items-center ">
+<div class="w-2/3">
+    <div class="flex space-x-4 border-b border-gray-700 pb-2 mb-4">
+        <div class="tab p-2" onclick="switchTab('all')">All Results</div>
+        <div class="tab p-2" onclick="switchTab('users')">Users (Nicknames)</div>
+        <div class="tab p-2" onclick="switchTab('categories')">Project Categories</div>
+        <div class="tab p-2" onclick="switchTab('projects')">Project Names</div>
+    </div>
+    
+    <div class="relative overflow-hidden">
+        <div id="all" class="tab-content active p-4 bg-gray-800 rounded-lg">
+            
+            <h2 class="text-xl font-bold">Users</h2>
+            {% if Users  %}
+                {% for item in Users %}
+                    <p>{{item.nickname}}</p>
+                {% endfor %}
+
+            {% else %}
+            <p>No User Found!</p>
+            {% endif %}
+            <br><br>
+            <h2 class="text-xl font-bold">Project Categories</h2>
+            {% if Users %}
+                {% for item in Users %}
+                    <p>{{item.category_name}}</p>
+                {% endfor %}
+
+            {% else %}
+            <p>No Category Found!</p>
+            {% endif %}
+
+            <br><br>
+            <h2 class="text-xl font-bold">Project Names</h2>
+            
+            {% if Users %}
+                {% for item in Users %}
+                    <p>{{item.project_name}}</p>
+                {% endfor %}
+
+            {% else %}
+            <p>No Project Found!</p>
+            {% endif %}
+
+        </div>
+        <div id="users" class="tab-content p-4 bg-gray-800 rounded-lg">
+            <h2 class="text-xl font-bold">Users</h2>
+            {% for item in Users %}
+                <p>{{item.nickname}}</p>
+            {% endfor %}
+        </div>
+        <div id="categories" class="tab-content p-4 bg-gray-800 rounded-lg">
+            <h2 class="text-xl font-bold">Project Categories</h2>
+            {% for item in Categories %}
+                <p>{{item.category_name}}</p>
+            {% endfor %}
+        </div>
+        <div id="projects" class="tab-content p-4 bg-gray-800 rounded-lg">
+            <h2 class="text-xl font-bold">Project Names</h2>
+            
+            {% for item in Projects %}
+                <p class="btn btn-primary">{{item.project_name}}</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active');
+    }
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+</div>
+{% endblock MainDiv %}
+

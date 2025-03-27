@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+
+{% block PageTitle %}Verify Email{% endblock PageTitle %}
+
+
+{% block MainDiv %}
+
+<div class="fs-5 d-flex align-items-center justify-content-center ">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 ">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <h3 class="text-center mb-4">Verify Your Account to Heavenly Bytes</h3>
+
+                        <div class="mb-3">
+                            <label for="Email" class="form-label"><strong>Email:</strong></label>
+                            {{request.user.email}}
+                            <form method="post">
+                                {% csrf_token %}
+                                <button name="SendEmail" type="submit" class="btn btn-primary">Send Mail</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock MainDiv %}

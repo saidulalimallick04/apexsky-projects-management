@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block Title %}{{Project_type}}{% endblock Title %}
+
+
+{% block CustomCSS %}
+
+
+.category-header {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+}
+
+.product-card {
+    transition: transform 0.3s ease-in-out;
+}
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.image-project {
+    display: block;
+    width: 300px;
+    height: auto;
+}
+
+.icon-verified {
+    padding: 2%;
+    background-color: bisque;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    color: blue;
+}
+
+
+{% endblock CustomCSS %}
+
+
+
+{% block MainDiv %}
+
+<div class="d-flex justify-content-between p-5">
+    <div class="category-header mt-3 ms-3 ">{{user_nickname}}</div>
+    <div class="category-header mt-3 ms-3 dis ">
+        Verified Project: <i class=" fa-solid fa-circle-check rounded rounded" style="color: blue; background-color:bisque"></i>
+    </div>
+</div>
+
+<div class="container">
+    <div class="category-container">
+        <div class="row mt-3 mb-3">
+            
+            {% for item in projects %}
+                <a class="col-md-3 mt-3 product-card shadow-sm text-decoration-none" href="/projects/projectoverview/{{item.id}}">
+                    <div>
+                        <div class="card">
+                        <img src="{{item.project_external_image}}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Product Image">
+                        {% if item.is_verified == 1 %}
+                        <i class="icon-verified fa-solid fa-circle-check rounded "></i>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{item.project_name}}</h5>
+                            <p class="card-text">{{item.project_description | truncatechars:50 }}</p>
+                        </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+
+            
+        </div>
+    </div>
+</div>
+
+{% endblock MainDiv %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block Title %}Dashbord{% endblock %}
+
+{% block CustomCSS %}
+
+.fixed-height{
+    height:250px;
+}
+
+{% endblock CustomCSS %}
+
+
+
+
+<!---------------------------------------------------------->
+
+{% block MainDiv %}
+
+<div class="container mt-4">
+    <div class="row bg-white mb-4">
+        <!-- First Row: Full-width Statistics Block -->
+        <div class="row mb-4 d-flex align-items-center justify-content-center">
+
+        <div>
+    </div>
+    
+    <!-- Second Row: Three Fixed-size Mini Blocks -->
+    <div class="row g-4 ">
+        <div class="col-md-4">
+            <div class="bg-dark p-4 shadow rounded fixed-height d-flex flex-column align-items-center justify-content-center">
+                <h4>Total Order</h4>
+                <p>5</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bg-dark p-4 shadow rounded fixed-height d-flex flex-column align-items-center justify-content-center">
+                <h4>Current Order</h4>
+                <p>5</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bg-dark p-4 shadow rounded fixed-height d-flex flex-column align-items-center justify-content-center">
+                <h4>Total Spending</h4>
+                <p>$250</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+{% endblock MainDiv %}
