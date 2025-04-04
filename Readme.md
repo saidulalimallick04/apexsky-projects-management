@@ -1,5 +1,7 @@
 # Sam-Projects
-    >> A Management Software to manage all my projects.
+    >> A Management Software to manage all projects. Anyone Can Manage, Store, Showcase their projects to everyone .
+    >> User Authencation System, Projects, Different Categories, Link Project Urls, Githib Repository and Give the shoetlink to anyone to anyone. Here you can set a team members name 
+    
 
 
 # Technology Used: 
@@ -7,7 +9,7 @@
     >> Framework: Django                <br>
     >> Backend: Python-Django           <br>
     >> Database: PostgreSQL             <br>
-    >> Deployment: ---                  <br>
+    >> Deployment: ----                 <br>
 
 
 # Project Duration: 

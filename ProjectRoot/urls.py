@@ -28,34 +28,42 @@ urlpatterns = [
     #--------------------------------------------------------------------------
         # Home ---->>
     
-    path("",homePage,name='HeavenlyBytes'),
-    path("home/",homePage,name='HeavenlyBytes'),
-    path("url-not-found/",urlNotFound,name='UrlNotFound'),
+    path("",homePage,name='Heavenly_Bytes'),
+    path("home/",homePage,name='Heavenly_Bytes'),
+    path("search/",searchData,name='SearchUrl'),
     # path("explore/",explorePage,name='Heavenly-Bytes-Explore'),
     # path("aboutus/",aboutUsPage,name='Heavenly-Bytes-AboutUs'),
     # path("contactus/",contactUsPage,name='Heavenly-Bytes-ContactUs'),
     
-    path("search/",searchData,name='SearchUrl'),
     
+    
+    path("url-not-found/",urlNotFound,name='UrlNotFound'),
     #--------------------------------------------------------------------------
         # Users ---->>
     
-    path("createaccount/",createAccount,name="Create Account"),
+    path("createaccount/",createAccount,name="Create_Account"),
     path("login/",loginAccount,name="Login"),
     path("logout/",logoutAccount,name="Logout"),
-    path("profile/",userProfile,name='Profile'),
-    path("updateprofile/",updateProfile,name='Update Profile'),
-    path("deleteprofile/",deleteProfile,name='Delete Profile'),
+    path("profile/",userProfile,name='Profile_Page'),
+    path("setnickname/",setNickname,name='Set_Nickname'),
+    path("updateprofile/",updateProfile,name='Update_Profile'),
+    path("deleteprofile/",deleteProfile,name='Delete_Profile'),
     
-    path("dashboard/",userDashboard,name='Dashboard'),
-    path("verifyemail/",verifyEmail,name='Email-Verify'),
-    path("otpconformation/",otpConformation,name='Email-OTP'),
+    path("verifyemail/",verifyEmail,name='Email_Varification_Page'),
+    path("otpconformation/",otpConformation,name='Email_OTP_Page'),
     
     
     #--------------------------------------------------------------------------
         # Projects ---->>
         
-    path("projects/",include("Projects.urls"))
+    path("projects/",include("Projects.urls")),
+    
+    
+    
+    #--------------------------------------------------------------------------
+        # Projects ---->>
+        
+    path("blogs/",include("Blogs.urls"))
     
     
     

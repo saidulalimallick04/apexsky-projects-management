@@ -11,3 +11,16 @@ class HeroSectionImage(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
+class UserFeedBack(models.Model):
+    
+    name=models,models.CharField(max_length=50)
+    
+    email=models.EmailField(max_length=254)
+    
+    time=models.TimeField(auto_now=False, auto_now_add=True)
+    
+    feedback=models.TextField(max_length=300)
+    
+    status=models.CharField(max_length=50,default="Pending")

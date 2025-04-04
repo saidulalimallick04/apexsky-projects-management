@@ -166,7 +166,7 @@
                 <div class="row mt-3 mb-3">
                     {% for item in projects %}
                     <div class="col-md-3 mt-3 product-card shadow-sm">
-                        <a class="text-decoration-none" href="/projects/projectoverview/{{item.id}}">
+                        <a class="text-decoration-none" href="{%url "Project_Overview" item.id %}">
                             <div class="card">
                                 <div class="card-body"> 
                                 <div class="d-flex justify-content-between">
@@ -188,7 +188,7 @@
                     {% endfor %}
 
                     <div class="col-md-3 mt-3 d-flex justify-content-center align-items-center">
-                        <a href="{% url 'AllProjects' category_id=category.id %}" class="see-all-btn" data-bs-toggle="tooltip"  title="See All">&rarr;</a>
+                        <a href="{% url 'All_Projects' category_id=category.id %}" class="see-all-btn" data-bs-toggle="tooltip"  title="See All">&rarr;</a>
                         
                     </div>
                 </div>

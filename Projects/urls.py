@@ -5,11 +5,11 @@ from .views import *
 
 urlpatterns = [
     
-    path("",projectsHome,name='ProjectHomePage'),
-    path("allprojects/<int:category_id>/",allProjects,name='AllProjects'),
-    path("projectoverview/<int:project_id>",ProjectOverview,name='ProjectOverview'),
-    path("registerproject/",registerProject,name="RegisterProject"),
-    path("myprojects/",myProjects,name='MyProjects'),
+    path("",projectsHome,name='Project_Home_Page'),
+    path("allprojects/<int:category_id>/",allProjects,name='All_Projects'),
+    path("projectoverview/<int:project_id>",ProjectOverview,name='Project_Overview'),
+    path("registerproject/",registerProject,name="Register_Project"),
+    path("myprojects/",myProjects,name='Dashboard_Page'),
     
-    path("updateproject/<int:project_id>",updateProject,name="EditProject")
+    path("updateproject/<int:project_id>",updateProject,name="Update_Project")
 ]

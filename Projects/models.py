@@ -7,8 +7,7 @@ User=get_user_model()
 class ProjectCategory(models.Model):
     
     category_name=models.CharField(max_length=50,unique=True)
-    category_descriptions=models.TextField(max_length=100)
-    category_use_count=models.IntegerField(default=0)
+    category_descriptions=models.TextField(max_length=100,default="--No descriptions--")
     
     class Meta:
         ordering=['category_name']
@@ -17,14 +16,21 @@ class ProjectCategory(models.Model):
         
     def __str__(self) -> str:
         return self.category_name
+    
 
+class ProjectLabel(models.Model):
+    label_name=models.CharField(max_length=50)
+    label_descriptions=models.TextField(max_length=200,default="--No descriptions--")
+    
+    def __str__(self)->str:
+        return self.label_name
+    
 
 class ProjectDetail(models.Model):
     
-    user=models.ForeignKey(User, on_delete=models.SET_DEFAULT,default='Anonymus')
-    
-    category=models.ForeignKey(ProjectCategory,on_delete=models.SET_DEFAULT,default='Unknown')
-    
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    category=models.ForeignKey(ProjectCategory,on_delete=models.CASCADE)
+    label=models.ForeignKey(ProjectLabel,models.CASCADE)
     nickname=models.CharField(max_length=15,null=True,blank=True)
     is_verified=models.BooleanField(default=False)
     

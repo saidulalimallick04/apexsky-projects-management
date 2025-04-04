@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block Title %}Heavenly Blog{% endblock Title %}
+
+{% block CustomCSS %}
+
+.container {
+    max-width: 900px;
+}
+.profile-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+.info {
+    font-size: 14px;
+    color: #bbb;
+}
+.custom-card {
+    flex: 1;
+    min-width: 250px;
+}
+.profile-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.like-dislike {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+{% endblock CustomCSS %}
+
+
+
+
+<!---------------------------------------------------------->
+
+{% block MainDiv %}
+
+<div class="container p-3 rounded bg-dark d-flex flex-column gap-3">
+    <!-- Profile Section -->
+    <div class="profile-section">
+        <div class="d-flex align-items-center">
+            <img class="rounded-circle profile-img me-3" src="https://plus.unsplash.com/premium_photo-1692805434290-21537c51f35b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Profile Image">
+            <div>
+                <a href="#" class="text-decoration-none text-light"><strong class="fs-4">Saidul</strong></a>
+                <div class="info">12.02.2025</div>
+            </div>
+        </div>
+        <div class="like-dislike">
+            <button class="btn btn-outline-light">👍 <span id="like-count">0</span></button>
+            <button class="btn btn-outline-light">👎 <span id="dislike-count">0</span></button>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-3 align-items-start">
+        <!-- Image Card -->
+        <div class="card custom-card">
+            <img src="https://plus.unsplash.com/premium_photo-1692805434290-21537c51f35b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top" alt="Food Image">
+        </div>
+
+        <!-- Content Card -->
+        <div class="card custom-card">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Button</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.btn-outline-light').forEach(button => {
+        button.addEventListener('click', function () {
+            let countSpan = this.querySelector('span');
+            countSpan.textContent = parseInt(countSpan.textContent) + 1;
+        });
+    });
+</script>
+
+{% endblock MainDiv %}

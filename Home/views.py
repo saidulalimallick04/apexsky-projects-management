@@ -7,31 +7,36 @@ import random
 from django.contrib.auth import get_user_model
 Users=get_user_model()
 
-from Projects.ulities import request_for_image
+from Projects.utils import request_for_image
 # Create your views here.
 
 def homePage(request):
-    x=random.randint(1,20)
-    Query=HeroSectionImage.objects.get(id=x)
-    HeroImage=[Query.image_one,Query.image_two,Query.image_three]
     
-    bigProjects=ProjectDetail.objects.filter(category__category_name='Prime Projects').order_by('-project_use_count')[:4]
-    miniProjects=ProjectDetail.objects.filter(category__category_name='Mini Project').order_by('-project_use_count')[:4]
-    
-    upCommingProjects=ProjectDetail.objects.filter(project_status='Comming Soon')[:4]
-    
-    announcements='''Image/Media Management in server is not live yet!! still use Unsplace(https://unsplash.com/)'''
-    
-    context={
-        'heroImages': HeroImage,
-        'bigProjects': bigProjects,
-        'miniProjects': miniProjects,
-        'topBlog': None ,
-        'upCommingProjects': upCommingProjects,
-        "Announcements":announcements
-    }
-    
-    return render(request, "home/index.html",context)
+    try:
+        x=random.randint(1,20)
+        Query=HeroSectionImage.objects.get(id=x)
+        HeroImage=[Query.image_one,Query.image_two,Query.image_three]
+        
+        bigProjects=ProjectDetail.objects.filter(category__category_name='Prime Projects').order_by('-project_use_count')[:4]
+        miniProjects=ProjectDetail.objects.filter(category__category_name='Mini Project').order_by('-project_use_count')[:4]
+        
+        upCommingProjects=ProjectDetail.objects.filter(project_status='Comming Soon')[:4]
+        
+        announcements='''Image/Media Management in server is not live yet!! still use Unsplace(https://unsplash.com/)'''
+        
+        context={
+            'heroImages': HeroImage,
+            'bigProjects': bigProjects,
+            'miniProjects': miniProjects,
+            'topBlog': None ,
+            'upCommingProjects': upCommingProjects,
+            "Announcements":announcements
+        }
+        
+        
+    except:
+        
+        return render(request, "home/index.html")
 
 
 def urlNotFound(request):

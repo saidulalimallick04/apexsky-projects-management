@@ -1,6 +1,5 @@
 from .utils import *
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
@@ -14,20 +13,18 @@ User=get_user_model()
 def createAccount(request):
     
     if request.method=='POST':
-        
         if 'AccountCreate' in request.POST:
             try:
                 data=request.POST
                 
                 First_Name=data.get('First_Name')
                 Last_Name=data.get('Last_Name')
-                Nickname=data.get('Nickname')
                 
                 Email=data.get("Email")
                 Password=data.get("Password")
                 
                 About_Me=data.get('About_Me')
-                Phone_Number=' '+data.get('Phone_Number')
+                Phone_Number=data.get('Phone_Number')
                 
                 Location=data.get('Location')
                 DoB=data.get('DoB')
@@ -35,7 +32,6 @@ def createAccount(request):
                 
                 user=User.objects.create(
                     email=Email,
-                    nickname=Nickname,
                     first_name=First_Name,
                     last_name=Last_Name, 
                     about_me=About_Me,
@@ -43,19 +39,46 @@ def createAccount(request):
                     location=Location,
                     gender=Gender,
                     date_of_birth=DoB
-                    )
+                )
                 user.set_password(Password)
                 user.save()
                 
-                messages.info(request," Account Created Successfully ^_^")
-                
+                messages.info(request,"Account Created Successfully ^_^")
                 return redirect("/login")
-                
             except:
                 messages.info(request, "Something Went wrong!!")
                 return redirect("/createaccount")
     else:    
         return render(request,"users/create_Account_page.html")
+    
+@login_required(login_url='/login/')
+def setNickname(request):
+    if request.method=="POST":
+        auth_user=request.user
+        print(auth_user)
+        
+        data=request.POST
+        user_nickname=data.get("Nickname")
+        
+        if User.objects.filter(nickname=user_nickname).exists():
+            messages.error(request,"Nickname already used!!")
+            return redirect("/setnickname")
+        else:
+            try:
+                user1=User.objects.get(id=auth_user.id)
+                user1.nickname=user_nickname
+                user1.save()
+                
+                ProjectDetail.objects.filter(user=request.user.id).update(nickname=user_nickname)
+                
+                messages.info(request,"Nickname set successfully ^_^")
+                
+                return redirect('/profile')
+            except:
+                messages.error(request,"Something went wrong!!")
+                return redirect("/setnickname")
+    else:
+        return render(request, 'users/set_nickname_page.html')
 
 #-----------------------------------------------------------------------------------------------------------------------------------------
 def loginAccount(request):
@@ -129,6 +152,7 @@ def verifyEmail(request):
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------------
+@login_required(login_url='/login/')
 def otpConformation(request):
     
     if 'OTP_SUBMISSION' in request.POST:
@@ -148,7 +172,7 @@ def otpConformation(request):
                 
     return render(request,'users/otp_conformation_page.html')
 
-
+@login_required(login_url='/login/')
 def updateProfile(request):
     
     if request.method=="POST":
@@ -157,7 +181,6 @@ def updateProfile(request):
             uuid=request.user.unique_identifier
             First_Name=data.get('First_Name')
             Last_Name=data.get('Last_Name')
-            Nickname=data.get('Nickname')
 
             About_Me=data.get('About_Me')
             Phone_Number=data.get('Phone_Number')
@@ -168,15 +191,12 @@ def updateProfile(request):
             user1=User.objects.get(unique_identifier=uuid)
             user1.first_name=First_Name
             user1.last_name=Last_Name
-            user1.nickname=Nickname
             user1.about_me=About_Me
             user1.phone_number=Phone_Number
             user1.location=Location
             user1.gender=Gender
             user1.date_of_birth=DoB
             user1.save()
-            
-            ProjectDetail.objects.filter(user=request.user.id).update(nickname=Nickname)
             
             messages.info(request," Update Successful ^_^")
             
@@ -190,7 +210,7 @@ def updateProfile(request):
         
         return render(request,'users/edit_profile_page.html')
 
-
+@login_required(login_url='/login/')
 def deleteProfile(request):
     
     try:    

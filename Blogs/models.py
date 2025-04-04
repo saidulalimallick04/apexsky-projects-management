@@ -7,7 +7,7 @@ User=get_user_model()
 
 class Blog(models.Model):
 
-    user=models.ForeignKey(User, on_delete=models.SET_DEFAULT,default="Unknown User")
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
     user_nickname=models.CharField(max_length=50,null=True,blank=True)
     blog_title=models.CharField(max_length=50)
     blog_descriptions=models.TextField(max_length=250,default="No Descriptions")
@@ -16,7 +16,7 @@ class Blog(models.Model):
     blog_external_image=models.TextField(max_length=400)
     
     blog_like=models.IntegerField(default=0)
-    blog_dislike=models.IntegerField(default=0)
+    blog_liked_users=models.ManyToManyField("Users.CustomUser",related_name="liked_post",blank=True)
     blog_comments=ArrayField(models.TextField(max_length=100),null=True,blank=True,default=list)
     
 

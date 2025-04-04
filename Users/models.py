@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     is_verified=models.BooleanField(default=False)
     username=None
 
-    nickname=models.CharField(max_length=20,blank=True,null=True)
+    nickname=models.CharField(max_length=20,blank=True,null=True,unique=True)
     about_me=models.TextField(max_length=20,blank=True,null=True)
     location=models.TextField(max_length=20,blank=True,null=True)
     profile_pic=models.ImageField(upload_to=None,null=True,blank=True)

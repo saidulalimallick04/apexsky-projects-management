@@ -10,6 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
+      body {
+        font-family: "Rockwell";
+        
+    }
       .custom-bg {
         background-color: #0A1128; 
       }
@@ -30,7 +34,7 @@
       <div class="container-fluid">
 
         <a class="navbar-brand fw-bold fs-1" href="/">
-          <i class="fa-brands fa-cotton-bureau fa-spin"></i>
+          <i class="fa-brands fa-cotton-bureau"></i>
           Sami's Projects
         </a>
 
@@ -52,11 +56,11 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link active fw-bold fs-5" aria-current="page" href="/dashboard">Dashboard</a>
+              <a class="nav-link active fw-bold fs-5" aria-current="page" href="{% url 'Dashboard_Page' %}">Dashboard</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link fw-bold fs-5" href="/blog/exploreblog">Blog</a>
+              <a class="nav-link fw-bold fs-5" href="{% url 'Blog_Homepage'%}">Blog</a>
             </li>
 
             <li class="nav-item dropdown">

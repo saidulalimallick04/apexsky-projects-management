@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block Title %}{% endblock Title %}
+
+{% block CustomCSS %}
+
+
+{% endblock CustomCSS %}
+
+
+{% block MainDiv %}
+
+
+<div class="fs-5 d-flex align-items-center justify-content-center ">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 ">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <h3 class="text-center mb-4">Set Nickname</h3>
+
+                        <div class="mb-3">
+                            <label for="Name" class="form-label"><strong>User:</strong></label>
+                            {{request.user.first_name}}
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="nickname" class="form-label">Nickname:<sup>(max 20 character)</sup></label>
+                                    {% if request.user.nickname %}
+                                    <input name="Nickname" value="{{request.user.nickname}}" type="text" class="form-control" id="nickname" placeholder="Enter your Nickane" required>
+                                    {% else %}
+                                    <input name="Nickname" type="text" class="form-control" id="nickname" placeholder="Enter your Nickane" required>
+                                    {% endif %}
+                                    <sub>should be unique!!</sub>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-submit">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock MainDiv %}

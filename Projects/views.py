@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from .models import *
-from .ulities import request_for_image
+from .utils import request_for_image
 
 from django.contrib.auth import get_user_model
 User=get_user_model()
@@ -68,7 +68,11 @@ def registerProject(request):
             Project_Category=ProjectCategory.objects.get(category_name=Project_Category)
             Nickname=request.user.nickname
             
-            Project_External_Photo=request_for_image(Project_Name, per_page=1)[0]
+            import random
+            
+            image_index= random.randint(1,25)
+            
+            Project_External_Photo=request_for_image(Project_Name, per_page=image_index)[image_index]
             
             Project_Url=data.get("Project_Url")
             Project_Github_Repo=data.get("Github_Repository")
