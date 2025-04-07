@@ -51,6 +51,18 @@
                                 
                             </select>
                         </div>
+
+                        <div class="col-md-4">
+                            <label for="label" class="form-label">Label</label>
+                            <select name="Label" class="form-select" id="label" required>
+                                <option selected value="{{project.label}}" >{{project.label}}</option>
+                                {% for label in labels %}
+                                    <option value="{{label}}">{{label}}</option>
+                                {% endfor %}
+                                
+                            </select>
+                        </div>
+
                         <div class="col-md-4">
                             <label for="Status" class="form-label">Project Status</label>
                             <select name="Status" class="form-select" id="Status" required>
@@ -62,6 +74,15 @@
                             </select>
                         </div>
                         
+                        <div class="col-md-4">
+                            <label for="document-file" class="form-label">Project Documentation(pdf,docs)</label>
+                            <input type="text" class="form-control" Disabled placeholder="Currently not Accepetable"  id="document-file">
+                            {% comment %} <input type="file" class="form-control" disabled id="document-file" name="Document_File"> {% endcomment %}
+                        </div>
+                    </div>
+                    
+                    <hr class="mt-3 mb-3">
+                    <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="document-file" class="form-label">Project Documentation(pdf,docs)</label>
                             <input type="text" class="form-control" Disabled placeholder="Currently not Accepetable"  id="document-file">

@@ -6,8 +6,6 @@ import random
 
 from django.contrib.auth import get_user_model
 Users=get_user_model()
-
-from Projects.utils import request_for_image
 # Create your views here.
 
 def homePage(request):

@@ -4,6 +4,13 @@ from django.contrib.auth import get_user_model
 User=get_user_model()
 # Create your models here.
 
+
+def setDefaultCategory():
+    return ProjectCategory.objects.get_or_create(name="undefined")[0]
+
+def setDefaultLabel():
+    return ProjectLabel.objects.get_or_create(name="undefined")[0]
+
 class ProjectCategory(models.Model):
     
     category_name=models.CharField(max_length=50,unique=True)
@@ -29,8 +36,8 @@ class ProjectLabel(models.Model):
 class ProjectDetail(models.Model):
     
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-    category=models.ForeignKey(ProjectCategory,on_delete=models.CASCADE)
-    label=models.ForeignKey(ProjectLabel,models.CASCADE)
+    category=models.ForeignKey(ProjectCategory,on_delete=models.SET_DEFAULT,default=setDefaultCategory)
+    label=models.ForeignKey(ProjectLabel,models.SET_DEFAULT,default=setDefaultLabel)
     nickname=models.CharField(max_length=15,null=True,blank=True)
     is_verified=models.BooleanField(default=False)
     

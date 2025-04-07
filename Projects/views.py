@@ -66,6 +66,10 @@ def registerProject(request):
             Project_Status=data.get("Status")
             Project_Category=data.get("Category")
             Project_Category=ProjectCategory.objects.get(category_name=Project_Category)
+            
+            Project_Label=data.get("Label")
+            Project_Label=ProjectLabel.objects.get(label_name=Project_Label)
+            
             Nickname=request.user.nickname
             
             import random
@@ -80,6 +84,7 @@ def registerProject(request):
             new_project=ProjectDetail.objects.create(
                 user=request.user,
                 category=Project_Category,
+                label=Project_Label,
                 nickname=Nickname,
                 project_name=Project_Name,
                 
@@ -110,8 +115,10 @@ def registerProject(request):
             
     else:
         category_QUERYSET=ProjectCategory.objects.all()
+        label_QUSERSET=ProjectLabel.objects.all()
         context={
-            'categories':category_QUERYSET
+            'categories':category_QUERYSET,
+            "labels": label_QUSERSET
         }
         return render(request,'projects/register_project_page.html',context)
 
@@ -128,10 +135,10 @@ def updateProject(request,project_id):
         
         Project_Status=data.get("Status")
         Project_Category=data.get("Category")
+        Project_Label=data.get("Label")
         Category_Object=ProjectCategory.objects.get(category_name=Project_Category)
+        Label_Object=ProjectLabel.objects.get(label_name=Project_Label)
         
-        print(Project_Category)
-        print(Category_Object)
         Project_Url=data.get("Project_Url")
         Project_Github_Repo=data.get("Github_Repository")
         
@@ -139,6 +146,7 @@ def updateProject(request,project_id):
         project1=ProjectDetail.objects.get(id=proj_id)
         
         project1.category=Category_Object
+        project1.label=Label_Object
         project1.project_name=Project_Name
         project1.project_status=Project_Status
         
@@ -159,11 +167,12 @@ def updateProject(request,project_id):
     
     else:
         project_QUERY=ProjectDetail.objects.get(id=project_id)
-        category_QUERY=ProjectCategory.objects.values_list('category_name',flat=True).distinct
-        
+        category_QUERYSET=ProjectCategory.objects.values_list('category_name',flat=True).distinct
+        label_QUERYSET=ProjectLabel.objects.values_list('label_name',flat=True).distinct
         context={
             "project": project_QUERY,
-            "categories": category_QUERY
+            "categories": category_QUERYSET,
+            "labels": label_QUERYSET
         }
         return render(request,'projects/edit_project_page.html',context)
 
