@@ -10,6 +10,36 @@ User=get_user_model()
 
 # Create your views here.
 
+def loginAccount(request):
+    
+    next_url=request.GET.get('next','/')
+    
+    if request.method=='POST':
+        data=request.POST
+        
+        Email=data.get('Email')
+        Password=data.get('Password')
+        
+        is_user=User.objects.filter(email=Email)
+        
+        if is_user is None:
+            messages.warning(request,"No User Found!!")
+            return redirect("/login/")
+        else:
+            user=authenticate(email=Email,password=Password)
+            
+            if user is not None:
+                login(request,user)
+                messages.info(request,"Login Successful ^_^")
+                return redirect(next_url)
+            else:
+                messages.info( request,"Invalid Details!!")
+                return redirect ("/login/")
+            
+    return render(request, 'users/Login_page.html')
+
+#-----------------------------------------------------------------------------------------------------------------------------------------
+
 def createAccount(request):
     
     if request.method=='POST':
@@ -81,35 +111,7 @@ def setNickname(request):
         return render(request, 'users/set_nickname_page.html')
 
 #-----------------------------------------------------------------------------------------------------------------------------------------
-def loginAccount(request):
-    
-    next_url=request.GET.get('next','/')
-    
-    if request.method=='POST':
-        data=request.POST
-        
-        Email=data.get('Email')
-        Password=data.get('Password')
-        
-        is_user=User.objects.filter(email=Email)
-        
-        if is_user is None:
-            messages.warning(request,"No User Found!!")
-            return redirect("/login/")
-        else:
-            user=authenticate(email=Email,password=Password)
-            
-            if user is not None:
-                login(request,user)
-                messages.info(request,"Login Successful ^_^")
-                return redirect(next_url)
-            else:
-                messages.info( request,"Invalid Details!!")
-                return redirect ("/login/")
-            
-    return render(request, 'users/Login_page.html')
 
-#-----------------------------------------------------------------------------------------------------------------------------------------
 @login_required(login_url='/login/')
 def logoutAccount(request):
     
