@@ -48,7 +48,7 @@ def createAccount(request):
             except:
                 messages.info(request, "Something Went wrong!!")
                 return redirect("/createaccount")
-    else:    
+    else:     
         return render(request,"users/create_Account_page.html")
     
 @login_required(login_url='/login/')

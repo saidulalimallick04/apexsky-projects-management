@@ -7,7 +7,8 @@ from django.contrib.auth import get_user_model
 User=get_user_model()
 
 
-def send_otp_email(request):    
+def send_otp_email(request):   
+    
     otp=''
     for i in range(6):
         otp+=str(random.randint(0,9))

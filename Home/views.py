@@ -11,12 +11,12 @@ Users=get_user_model()
 def homePage(request):
     
     try:
-        x=random.randint(1,20)
+        x=random.randint(1,4)
         Query=HeroSectionImage.objects.get(id=x)
         HeroImage=[Query.image_one,Query.image_two,Query.image_three]
         
-        bigProjects=ProjectDetail.objects.filter(category__category_name='Prime Projects').order_by('-project_use_count')[:4]
-        miniProjects=ProjectDetail.objects.filter(category__category_name='Mini Project').order_by('-project_use_count')[:4]
+        bigProjects=ProjectDetail.objects.all().order_by('-project_use_count')[:4]
+        miniProjects=ProjectDetail.objects.filter(label__label_name='Hobby Project').order_by('-project_use_count')[:4]
         
         upCommingProjects=ProjectDetail.objects.filter(project_status='Comming Soon')[:4]
         
@@ -31,9 +31,9 @@ def homePage(request):
             "Announcements":announcements
         }
         
-        
+        return render(request, "home/index.html",context)
     except:
-        
+        print("Error")
         return render(request, "home/index.html")
 
 

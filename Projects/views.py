@@ -76,7 +76,7 @@ def registerProject(request):
             
             image_index= random.randint(1,25)
             
-            Project_External_Photo=request_for_image(Project_Name, per_page=image_index)[image_index]
+            Project_External_Photo=request_for_image(Project_Name, per_page=image_index)[image_index-1]
             
             Project_Url=data.get("Project_Url")
             Project_Github_Repo=data.get("Github_Repository")
