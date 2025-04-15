@@ -79,7 +79,7 @@ def createAccount(request):
                 messages.info(request, "Something Went wrong!!")
                 return redirect("/createaccount")
     else:     
-        return render(request,"users/create_Account_page.html")
+        return render(request,"users/create_account_page.html")
     
 @login_required(login_url='/login/')
 def setNickname(request):
