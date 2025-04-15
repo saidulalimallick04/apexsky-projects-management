@@ -36,7 +36,7 @@ def loginAccount(request):
                 messages.info( request,"Invalid Details!!")
                 return redirect ("/login/")
             
-    return render(request, 'users/Login_page.html')
+    return render(request, 'users/login_page.html')
 
 #-----------------------------------------------------------------------------------------------------------------------------------------
 
