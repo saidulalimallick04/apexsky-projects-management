@@ -1,7 +1,10 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
+
+from django.contrib.auth.decorators import login_required
 from .models import *
 from .utils import request_for_image
+
 
 from django.contrib.auth import get_user_model
 User=get_user_model()
@@ -176,7 +179,7 @@ def updateProject(request,project_id):
         }
         return render(request,'projects/edit_project_page.html',context)
 
-
+@login_required(login_url='/login/')
 def myProjects(request):
     
     projects_QUERYSET=ProjectDetail.objects.filter(user=request.user).order_by('-project_use_count')

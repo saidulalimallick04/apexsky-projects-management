@@ -11,7 +11,7 @@ Users=get_user_model()
 def homePage(request):
     
     try:
-        x=random.randint(1,4)
+        x=random.randint(1,3)
         Query=HeroSectionImage.objects.get(id=x)
         HeroImage=[Query.image_one,Query.image_two,Query.image_three]
         
@@ -20,7 +20,8 @@ def homePage(request):
         
         upCommingProjects=ProjectDetail.objects.filter(project_status='Comming Soon')[:4]
         
-        announcements='''Image/Media Management in server is not live yet!! still use Unsplace(https://unsplash.com/)'''
+        announcements='''Image/Media Management in server is not live yet!! still use Unsplace'''
+        link = 'https://unsplash.com/'
         
         context={
             'heroImages': HeroImage,
@@ -28,7 +29,8 @@ def homePage(request):
             'miniProjects': miniProjects,
             'topBlog': None ,
             'upCommingProjects': upCommingProjects,
-            "Announcements":announcements
+            "Announcements":announcements,
+            "link" : link
         }
         
         return render(request, "home/index.html",context)

@@ -23,7 +23,7 @@ def send_otp_email(request):
     
     msg=EmailMessage()
     
-    msg['Subject']= 'OTP Verification'
+    msg['Subject']= 'ApexSky - Sign in'
     
     msg['From']= ourEmail
     
@@ -32,7 +32,7 @@ def send_otp_email(request):
     msg.set_content(f"""\
                     Dear {request.user.first_name},
 
-                    Your code for Sami's Projects is: 
+                    Your code for ApexSky Projects Management is: 
 
                     🔢 {otp}
 
@@ -41,7 +41,7 @@ def send_otp_email(request):
                     If this request was not made by you, simply ignore this email.
 
                     Best,  
-                    Samis'Project
+                    ApexSky
                     """)
     
     server.send_message(msg)

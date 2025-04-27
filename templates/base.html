@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
     <style>
       body {
@@ -33,6 +34,10 @@
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary);
+        }
+
+        #tag-line{
+          font-size: x-small;
         }
 
         .logo-text span {
@@ -65,7 +70,10 @@
                 <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="#3BDD77"/>
                 <path d="M20 10L30 20L20 30L10 20L20 10Z" fill="#2C3E50"/>
             </svg>
-            <span class="logo-text">Apex<span>Sky</span></span>
+            <div class="d-flex flex-column justify-content-end ms-3">
+              <span class="logo-text">Apex<span>Sky</span></span>
+              <span id="tag-line">Manage your Projects</span> 
+            </div>
         </div>
         </a>
 
@@ -123,7 +131,7 @@
             </li>
             <li class="nav-item disable">
               <form class="d-flex" action="{% url 'SearchUrl'%}" method='GET' role="search">
-                <input class="form-control me-2" name="query" type="search" placeholder="Search" aria-label="Search">
+                <input class="form-control me-2" name="query" type="search" placeholder="Search" aria-label="Search" required>
                 <button class="btn btn-outline-success" type="submit">Search</button>
               </form>
             </li>
@@ -154,13 +162,13 @@
     </nav>
   </header>
   {% if Announcements %}
-    <marquee behavior="" class="bg-primary text-white p-2 rounded shadow fw-bold" direction="">{{Announcements}}<a href="https://unsplash.com/">Support Unsplace</a></marquee>
+    <marquee class="bg-primary text-white p-2 rounded shadow fw-bold">{{Announcements}}<a class="text-white" href="{{link}}">Support Unsplace</a></marquee>
   {% endif %}
 
   {% if messages %}
   {% for message in messages %}
-  <div class="my-2 mx-3 alert alert-warning" role="alert">
-      {{message}}
+  <div id="alert" class="alert alert-primary alert-dismissible fade show" role="alert">
+    {{message}}
   </div>
   {% endfor %}
   {% endif %}
@@ -229,6 +237,12 @@
   </div>
   </footer>
 
-
+  <script>
+    $(document).ready(function(){
+      setTimeout(() =>{
+        $("#alert").hide()
+      },5000)
+    })
+  </script>
 </body>
 </html>
