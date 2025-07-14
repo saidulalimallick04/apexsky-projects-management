@@ -142,7 +142,7 @@ def verifyEmail(request):
     if request.user.is_verified:
         return redirect('/profile')
     
-    if request.method=="POST":
+    if request.method == "POST":
         if 'SendEmail' in request.POST:
             try: 
                 messages.info(request,send_otp_email(request))
@@ -152,6 +152,9 @@ def verifyEmail(request):
             
     return render(request, 'users/verify_email_page.html')
 
+def resetPassword(request):
+    
+    return render(request,'users/otp_conformation_page.html')
 
 #-----------------------------------------------------------------------------------------------------------------------------------------
 @login_required(login_url='/login/')
