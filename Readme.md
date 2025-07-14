@@ -36,29 +36,29 @@
 
 - Clone the project:
 
-\`\`\`bash
+```bash
 git clone https://github.com/saidulalimallick04/apexsky-projects-management.git
 cd apexsky-projects-management
-\`\`\`
+```
 
 - Install dependencies:
 
-\`\`\`bash
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 - Run the project:
 
-\`\`\`bash
+```bash
 python manage.py runserver
-\`\`\`
+```
 
 ---
 ---
 
 ## 📁 Folder Structure
 
-\`\`\`
+```
 apexsky-projects-management
 ├── ProjectRoot/   <--------------------Project Root
 │   ├── __ init__.py
@@ -105,12 +105,12 @@ apexsky-projects-management
 │   ├── home/
 │   ├── users/
 │   └── base.html
-├── _manage.py_
+├── manage.py
 ├── .env 
 ├── .gitignore
 ├── README.md
 ├── requirements.txt
-\`\`\`
+```
 
 ---
 ---
@@ -119,7 +119,7 @@ apexsky-projects-management
 
 To run this project, create a `.env` file in the root and add the following:
 
-\`\`\`env
+```env
 
 DATABASE_URL= _Secret Here_
 
@@ -132,7 +132,7 @@ UNSPLASH_URL = _Secret Here_
 
 SECRET_KEY = _Secret Here_   <------------------------Django secure key
 
-\`\`\`
+```
 
 ---
 ---
