@@ -1,42 +1,37 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
-from Projects.models import *
+from Projects.models import ProjectCategory,ProjectLabel,ProjectDetail
 from .models import HeroSectionImage
-import random
 
 from django.contrib.auth import get_user_model
 Users=get_user_model()
 # Create your views here.
 
-def homePage(request):
+def home_page(request):
     
     try:
-        x=random.randint(1,3)
-        Query=HeroSectionImage.objects.get(id=x)
-        HeroImage=[Query.image_one,Query.image_two,Query.image_three]
         
-        bigProjects=ProjectDetail.objects.all().order_by('-project_use_count')[:4]
-        miniProjects=ProjectDetail.objects.filter(label__label_name='Hobby Project').order_by('-project_use_count')[:4]
+        popularProjects = ProjectDetail.objects.filter(is_verified = True).order_by("-project_use_count")[:8]
         
-        upCommingProjects=ProjectDetail.objects.filter(project_status='Comming Soon')[:4]
+        upCommingProjects=ProjectDetail.objects.filter(project_status='Comming Soon').order_by("-id")[:4]
         
-        announcements='''Image/Media Management in server is not live yet!! still use Unsplace'''
-        link = 'https://unsplash.com/'
+        projectCatalogs = ProjectCategory.objects.all()
         
         context={
-            'heroImages': HeroImage,
-            'bigProjects': bigProjects,
-            'miniProjects': miniProjects,
-            'topBlog': None ,
+            "popularProjects" : popularProjects,
             'upCommingProjects': upCommingProjects,
-            "Announcements":announcements,
-            "link" : link
+            'projectCatalogs' : projectCatalogs,
         }
-        
-        return render(request, "home/index.html",context)
-    except:
-        print("Error")
-        return render(request, "home/index.html")
+        return render(request, "home/index2.html",context)
+    
+    except Exception as e:
+        print("Error: ", e)
+        return render(request, "home/index2.html")
+
+
+def explore_page(request):
+    
+    return render(request=request, template_name="home/explore_page.html")
 
 
 def urlNotFound(request):
@@ -46,13 +41,11 @@ def urlNotFound(request):
 
 
 
-def searchData(request):
+def search_page(request):
     
     if request.method== "GET":
         
         qurey=request.GET.get('query')
-        
-        
         
         Users_QUERYSET=Users.objects.filter(nickname__icontains=qurey)[0:4]
         Category_QUERYSET=ProjectCategory.objects.filter(category_name__icontains=qurey)[0:4]

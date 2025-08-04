@@ -1,5 +1,5 @@
 from django.db import models
-
+from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
 User=get_user_model()
 # Create your models here.
@@ -11,10 +11,21 @@ def setDefaultCategory():
 def setDefaultLabel():
     return ProjectLabel.objects.get_or_create(name="undefined")[0]
 
+#------------------------------------------------------------------------------------------------------
+
 class ProjectCategory(models.Model):
     
-    category_name=models.CharField(max_length=50,unique=True)
-    category_descriptions=models.TextField(max_length=100,default="--No descriptions--")
+    catagory_image = CloudinaryField(
+                        resource_type = "image",
+                        folder = "apexsky/project-catagory-image/",
+                        null = True,
+                        blank = True)    
+    
+    category_name=models.CharField(max_length=50,
+                        unique=True)
+    
+    category_descriptions=models.TextField(max_length=100,
+                        default="")
     
     class Meta:
         ordering=['category_name']
@@ -24,16 +35,29 @@ class ProjectCategory(models.Model):
     def __str__(self) -> str:
         return self.category_name
     
-
+#------------------------------------------------------------------------------------------------------
 class ProjectLabel(models.Model):
-    label_name=models.CharField(max_length=50)
-    label_descriptions=models.TextField(max_length=200,default="--No descriptions--")
     
-    def __str__(self)->str:
+    label_image = CloudinaryField(
+                        resource_type = "image",
+                        folder = "apexsky/project-label-image/",
+                        null = True,
+                        blank = True) 
+    label_name=models.CharField(max_length=50)
+    label_descriptions=models.TextField(max_length=200,default="")
+    
+    def __str__(self) -> str:
         return self.label_name
     
+#------------------------------------------------------------------------------------------------------
 
 class ProjectDetail(models.Model):
+    
+    project_image = CloudinaryField(
+                        resource_type = "image",
+                        folder = "apexsky/project-image/",
+                        null = True,
+                        blank = True) 
     
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     category=models.ForeignKey(ProjectCategory,on_delete=models.SET_DEFAULT,default=setDefaultCategory)
@@ -41,7 +65,6 @@ class ProjectDetail(models.Model):
     nickname=models.CharField(max_length=15,null=True,blank=True)
     is_verified=models.BooleanField(default=False)
     
-    project_image=models.ImageField(upload_to=None,null=True,blank=True)
     project_external_image=models.TextField(max_length=400,null=True,blank=True)
     
     project_name=models.CharField(max_length=50)
@@ -59,4 +82,4 @@ class ProjectDetail(models.Model):
     
     def __str__(self):
         return self.project_name
-    
+#------------------------------------------------------------------------------------------------------

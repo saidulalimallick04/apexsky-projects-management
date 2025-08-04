@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+
+{% block page_title %}Home{% endblock  %}
+
+{% block additional_styles %}{% endblock additional_styles %}
+
+
+{% load static %}
+
+{% block page_content_div %}
+
+<div class="page-content">
+    <!-- ***** Banner Start ***** -->
+    {% include "components/page_banner.html" %}
+    <!-- ***** Banner End ***** -->
+    
+    <!-- ***** Most Popular Start ***** -->
+    {% include "components/most_popular_projects.html" %}
+    <!-- ***** Most Popular End ***** -->
+    <!-- ***** Gaming Library Start ***** -->
+    {% include "components/project_library.html" %}
+    <!-- ***** Gaming Library End ***** -->
+</div>
+{% endblock page_content_div %}
+
+{% block additional_scripts %}{% endblock additional_scripts %}

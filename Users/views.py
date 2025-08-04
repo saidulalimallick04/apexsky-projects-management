@@ -136,6 +136,14 @@ def userProfile(request):
     return render(request, 'users/profile_page.html')
 
 #-----------------------------------------------------------------------------------------------------------------------------------------
+
+def user_account(request):
+    
+    
+    return render(request,"users/user_account_page.html")
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------------
 @login_required(login_url='/login/')
 def verifyEmail(request):
     

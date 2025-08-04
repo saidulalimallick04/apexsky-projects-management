@@ -28,47 +28,45 @@ urlpatterns = [
     #--------------------------------------------------------------------------
         # Home ---->>
     
-    path("",homePage,name='Heavenly_Bytes'),
-    path("home/",homePage,name='Heavenly_Bytes'),
-    path("search/",searchData,name='SearchUrl'),
-    # path("explore/",explorePage,name='Heavenly-Bytes-Explore'),
+    path("",home_page,name='landing-page'),
+    path("search/",search_page,name='search-page'),
+    path("explore/",explore_page,name='explore-page'),
     # path("aboutus/",aboutUsPage,name='Heavenly-Bytes-AboutUs'),
     # path("contactus/",contactUsPage,name='Heavenly-Bytes-ContactUs'),
     
     
-    
-    path("url-not-found/",urlNotFound,name='UrlNotFound'),
+    path("url-not-found/",urlNotFound,name='url-not-found'),
     #--------------------------------------------------------------------------
         # Users ---->>
     
-    path("createaccount/",createAccount,name="Create_Account"),
-    path("login/",loginAccount,name="Login"),
+    path("create-account/",createAccount,name="Create_Account"),
+    path("login/",loginAccount,name="login-page"),
     path("logout/",logoutAccount,name="Logout"),
-    path("profile/",userProfile,name='Profile_Page'),
-    path("setnickname/",setNickname,name='Set_Nickname'),
-    path("updateprofile/",updateProfile,name='Update_Profile'),
-    path("deleteprofile/",deleteProfile,name='Delete_Profile'),
+    path("profile/",userProfile,name='profile-page'),
+    path("account/",user_account,name='user-account-page'),
+    path("set-nickname/",setNickname,name='Set_Nickname'),
+    path("update-profile/",updateProfile,name='Update_Profile'),
+    path("delete-profile/",deleteProfile,name='Delete_Profile'),
     
-    path("verifyemail/",verifyEmail,name='Email_Varification_Page'),
-    path("otpconformation/",otpConformation,name='Email_OTP_Page'),
-    
+    path("verify-email/",verifyEmail,name='Email_Varification_Page'),
+    path("otp-conformation/",otpConformation,name='Email_OTP_Page'),
     
     #--------------------------------------------------------------------------
         # Projects ---->>
         
     path("projects/",include("Projects.urls")),
     
+
+    #--------------------------------------------------------------------------
+        # Blogs ---->>
+        
+    path("blogs/",include("Blogs.urls")),
     
     
     #--------------------------------------------------------------------------
-        # Projects ---->>
+        # APIs ---->>
         
-    path("blogs/",include("Blogs.urls"))
-    
-    
-    
-    
-    
+    path("api/",include("API.urls"))
 ]
 
 

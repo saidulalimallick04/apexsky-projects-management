@@ -11,8 +11,7 @@ class Blog(models.Model):
     user_nickname=models.CharField(max_length=50,null=True,blank=True)
     blog_title=models.CharField(max_length=50)
     blog_descriptions=models.TextField(max_length=250,default="No Descriptions")
-    
-    blog_image=models.ImageField(null=True,blank=True, upload_to=None, height_field=None, width_field=None, max_length=None)
+
     blog_external_image=models.TextField(max_length=400)
     
     blog_like=models.IntegerField(default=0)

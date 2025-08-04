@@ -16,7 +16,6 @@ class CustomUser(AbstractUser):
     nickname=models.CharField(max_length=20,blank=True,null=True,unique=True)
     about_me=models.TextField(max_length=20,blank=True,null=True)
     location=models.TextField(max_length=20,blank=True,null=True)
-    profile_pic=models.ImageField(upload_to=None,null=True,blank=True)
     date_of_birth=models.DateField(null=True,blank=True)
     gender=models.TextField(max_length=50,null=True,blank=True)
     
