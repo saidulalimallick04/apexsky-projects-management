@@ -37,7 +37,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 
 
-ALLOWED_HOSTS = ["apexsky.onrender.com"]
+ALLOWED_HOSTS = ["*"]
 
 
 AUTH_USER_MODEL='Users.CustomUser'
