@@ -1,130 +1,137 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,resolve_url
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
-from .models import *
-from .utils import request_for_image
-
-
 from django.contrib.auth import get_user_model
-User=get_user_model()
+
+from .models import Project,ProjectCatalog,ProjectLabel
+
 # Create your views here.
 
-def projectsHome(request):
-    category_QUERYSET=[]
-    projects_QUERYSET=[]
-    
-    cats=ProjectCategory.objects.all()
-    
-    for cat in cats:
-        category_QUERYSET.append(cat)
-        projects_QUERYSET.append(ProjectDetail.objects.filter(category=cat).order_by('-project_use_count')[0:3])
-    
-    p_data=zip(category_QUERYSET,projects_QUERYSET)
+User=get_user_model()
+
+def projects_home(request):
+    """
+        This Function return Project Homepage.\n
+        Carries Some of every projects. and can view all projects of that Catagory/Catalog.
+    """
+    # projects_demo_video = Project.objects.filter(demo_video is not None )
+
+    projectCatalogs = ProjectCatalog.objects.order_by("?")
     
     context={
-        'project_data': p_data
+        'projectCatalogs': projectCatalogs
     }
-    
-    return render(request,'projects/project_home_page.html',context)
+    return render(request,'projects/project_homepage.html',context)
 
 
-def allProjects(request,category_id):
+#--------------------------------------------------------------------------------------------------------------------------------
+def all_projects(request,category_handle):
+
+    catalog_object=ProjectCatalog.objects.get(handle = category_handle)
+    projects_QUERYSET=Project.objects.filter(catalog=catalog_object).order_by('-project_use_count')
     
-    
-    projects_QUERYSET=ProjectDetail.objects.filter(category=category_id).order_by('-project_use_count')
-    category_name=ProjectCategory.objects.get(id=category_id).category_name
     
     context={
-        "Project_type": category_name,
+        "Project_type": catalog_object.name,
         "projects": projects_QUERYSET
     }
     
     return render(request,'projects/see_all_projects_page.html',context)
 
-def ProjectOverview(request,project_id):
+#--------------------------------------------------------------------------------------------------------------------------------
+
+def view_project(request,project_handle):
+    """
+        This Function will fetch one Project at a time to see the project.\n
+        Context Values: [project]
+    """
+    reqested_project=Project.objects.get(handle = project_handle)
     
-    
-    project_QUERY=ProjectDetail.objects.get(id=project_id)
-    
-    project_QUERY.project_use_count += 1
-    project_QUERY.save()
+    reqested_project.use_count += 1
+    reqested_project.save()
     
     context={
-        "Project_name": project_QUERY.project_name,
-        "project": project_QUERY
+        "project": reqested_project
     }
-    return render(request,'projects/project_overview_page.html',context)
+    return render(request,'projects/view_project_page.html',context)
 
-
-def registerProject(request):
+#--------------------------------------------------------------------------------------------------------------------------------
+@login_required(login_url="/login/")
+def create_new_project(request):
     
     if request.method =="POST":
         try:
             data=request.POST
-        
-            Project_Name=data.get("Project_Name")
-            Project_descriptions=data.get("About_Project")
+
+            project_thumbnail_image = request.FILES.get("project_image")
+            project_document = request.FILES.get("project_document")
+
+            project_name = data.get("project_name")
+            project_status = data.get("project_status")
+            project_content = data.get("project_content")
+            user_username=request.user.username
             
-            Project_Status=data.get("Status")
-            Project_Category=data.get("Category")
-            Project_Category=ProjectCategory.objects.get(category_name=Project_Category)
+            project_catalog_id = data.get("project_catalog_id")
+            project_catalog = ProjectCatalog.objects.get(id=project_catalog_id)
             
-            Project_Label=data.get("Label")
-            Project_Label=ProjectLabel.objects.get(label_name=Project_Label)
+            project_label_id = data.get("project_label_id")
+            project_label = ProjectLabel.objects.get(id=project_label_id)
             
-            Nickname=request.user.nickname
+            deployed_url=data.get("deployed_url")
+            demo_video = data.get("demo-video-url")
+            github_url=data.get("github_url")
             
-            import random
-            
-            image_index= random.randint(1,25)
-            
-            Project_External_Photo=request_for_image(Project_Name, per_page=image_index)[image_index-1]
-            
-            Project_Url=data.get("Project_Url")
-            Project_Github_Repo=data.get("Github_Repository")
-            
-            new_project=ProjectDetail.objects.create(
-                user=request.user,
-                category=Project_Category,
-                label=Project_Label,
-                nickname=Nickname,
-                project_name=Project_Name,
-                
-                project_status=Project_Status,
-                project_external_image=Project_External_Photo
-            )
-            
-            if Project_descriptions != "" :
-                new_project.project_description=Project_descriptions 
-            
-            if len(Project_Url)>=7:
-                new_project.project_url= Project_Url
-                
-            if "github.com" in Project_Github_Repo:
-                new_project.project_github_repo=Project_Github_Repo
+        except Exception as e:
+            print("Error:", e)
             
             
+        try:
+            new_project= Project()
+            new_project.name= project_name
+            new_project.status= project_status
+            new_project.user_username= user_username
+            
+            new_project.user= request.user  
+            new_project.category= project_catalog
+            new_project.label= project_label
+
+            # These Values are not required. 
+            # So None can also come from frontend.
+            if project_content:                         
+                new_project.content= project_content
+            if deployed_url:
+                new_project.deployed_url= deployed_url
+            if demo_video:
+                new_project.demo_video = demo_video
+            if github_url:
+                new_project.github_repository = github_url
+
+            new_project.thumbnail_image = project_thumbnail_image   # if None, No issue
+            new_project.document_file = project_document            # if None, No issue
+
             new_project.save()
             
             messages.info(request, 'Register!! waiting for varification.')
-            
-            return redirect('/projects/myprojects')
+            return redirect(resolve_url("profile-page"))
         
         except EOFError:
             messages.info(request, EOFError)
             
-            return redirect('/projects/registerproject')
+            return redirect(resolve_url("new-project-page"))
             
     else:
-        category_QUERYSET=ProjectCategory.objects.all()
-        label_QUSERSET=ProjectLabel.objects.all()
+        catalog_QUERYSET=ProjectCatalog.objects.values_list("id", "name").all()
+        label_QUSERSET=ProjectLabel.objects.values_list("id", "name",).all()
+        
         context={
-            'categories':category_QUERYSET,
-            "labels": label_QUSERSET
+            'allCatalogs': catalog_QUERYSET,
+            'allLabel': label_QUSERSET
         }
-        return render(request,'projects/register_project_page.html',context)
-
+        return render(request,'projects/create_new_project_page.html',context)
+'''
+#--------------------------------------------------------------------------------------------------------------------------------
+@login_required(login_url="/login/")
 def updateProject(request,project_id):
     
     proj_id=project_id
@@ -139,14 +146,14 @@ def updateProject(request,project_id):
         Project_Status=data.get("Status")
         Project_Category=data.get("Category")
         Project_Label=data.get("Label")
-        Category_Object=ProjectCategory.objects.get(category_name=Project_Category)
+        Category_Object=ProjectCatalog.objects.get(category_name=Project_Category)
         Label_Object=ProjectLabel.objects.get(label_name=Project_Label)
         
         Project_Url=data.get("Project_Url")
         Project_Github_Repo=data.get("Github_Repository")
         
         
-        project1=ProjectDetail.objects.get(id=proj_id)
+        project1=Project.objects.get(id=proj_id)
         
         project1.category=Category_Object
         project1.label=Label_Object
@@ -179,6 +186,7 @@ def updateProject(request,project_id):
         }
         return render(request,'projects/edit_project_page.html',context)
 
+#--------------------------------------------------------------------------------------------------------------------------------
 @login_required(login_url='/login/')
 def myProjects(request):
     
@@ -190,3 +198,6 @@ def myProjects(request):
     }
     
     return render(request,'projects/see_my_projects_page.html',context)
+
+
+'''

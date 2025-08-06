@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+# from django.contrib.postgres.fields import ArrayField
 
 from django.contrib.auth import get_user_model
 User=get_user_model()
@@ -16,7 +16,7 @@ class Blog(models.Model):
     
     blog_like=models.IntegerField(default=0)
     blog_liked_users=models.ManyToManyField("Users.CustomUser",related_name="liked_post",blank=True)
-    blog_comments=ArrayField(models.TextField(max_length=100),null=True,blank=True,default=list)
+    # blog_comments=ArrayField(models.TextField(max_length=100),null=True,blank=True,default=list)
     
 
     class Meta:

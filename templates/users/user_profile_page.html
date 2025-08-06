@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Profile{% endblock page_title %}
+
+{% block additional_styles %}{% endblock additional_styles %}
+
+{% load static %}
+
+{% block page_content_div %}
+
+    <!-- ***** Banner Start ***** -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-profile ">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img src="https://res.cloudinary.com/content-storage/image/upload/w_1000/q_auto/f_auto/{{request.user.profile_image}}" alt="{{request.user.first_name}} {{request.user.last_name}}" style="border-radius: 23px;">
+                    </div>
+                    <div class="col-lg-4 align-self-center">
+                        <div class="main-info header-text">
+                            <span>{{request.user.username}}</span>
+                            <h4>{% if request.user.first_name %}{{request.user.first_name}} {{request.user.last_name}} {% else %} Your Name{% endif %}</h4>
+                            <p>{{request.user.about_me}}</p>
+                            <div class="main-border-button">
+                                <a href="{% url "new-project-page" %}">Add New Project</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 align-self-center">
+                        <ul>
+                            <li>Total Projects <span>{{total_project_count}}</span></li>
+                            <li>Verified Projects <span>{{verified_project_count}}</span></li>
+                            <li>Live Projects <span>{{live_project_count}}</span></li>
+                            <li>Location <span>{{request.user.location}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="clips">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="heading-section">
+                                        <h4><em>Your Popular</em> Projects</h4>
+                                    </div>
+                                </div>
+                                    {% for project in userProjects %}
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="item">
+                                                <div class="thumb">
+                                                    <img src="https://res.cloudinary.com/content-storage/image/upload/w_1000/q_auto/f_auto/{{project.thumbnail_image}}" alt="{{project.name}}"
+                                                        style="border-radius: 23px; height: 150px; ">
+                                                    <a href="#"
+                                                        target="_blank"><i class="fa fa-eye"></i></a>
+                                                </div>
+                                                <div class="down-content">
+                                                    <h4>{{project.name| truncatechars:15}}</h4>
+                                                    <span><i class="fa fa-eye"></i> {{project.use_count}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                <div class="col-lg-12">
+                                    <div class="main-button">
+                                        <a href="#">See All Projects</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Banner End ***** -->
+
+    <!-- ***** Gaming Library Start ***** -->
+    <div class="gaming-library profile-library">
+        <div class="col-lg-12">
+            <div class="heading-section">
+                <h4><em>Account</em> Actions</h4>
+            </div>
+            <div class="item text-end">
+                <ul>
+                    <li>
+                        <div class="main-border-button"><a href="#">Edit Account</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="main-border-button"><a href="{% url "logout-account" %}">Logout</a>
+                        </div>
+                    </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="item text-end">
+                <ul>
+                    <li>
+                        <h4>Cannot</h4><span>Recover in Future</span>
+                    </li>
+                    <li>
+                        <div class="main-border-button ">
+                            <a href="{% url "delete-account" %}">Delete Account</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Gaming Library End ***** -->
+{% endblock page_content_div %}
+
+{% block additional_scripts %}{% endblock additional_scripts %}

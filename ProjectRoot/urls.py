@@ -17,59 +17,51 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
-from .views import *
-from Home.views import *
+from .views import custom_404,custom_500
+from Home.views import home_page, explore_page, search_page, url_not_found
 from Users.views import *
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    #--------------------------------------------------------------------------
-        # Home ---->>
-    
+    # #------------------------------------------------------------------------------------
+    #     # Home ---->>
     path("",home_page,name='landing-page'),
     path("search/",search_page,name='search-page'),
     path("explore/",explore_page,name='explore-page'),
-    # path("aboutus/",aboutUsPage,name='Heavenly-Bytes-AboutUs'),
-    # path("contactus/",contactUsPage,name='Heavenly-Bytes-ContactUs'),
+    # path("aboutus/",about_us,name='about-us_page'),
+    # path("contactus/",contact_us,name='contact-us_page'),
     
-    
-    path("url-not-found/",urlNotFound,name='url-not-found'),
-    #--------------------------------------------------------------------------
-        # Users ---->>
-    
-    path("create-account/",createAccount,name="Create_Account"),
-    path("login/",loginAccount,name="login-page"),
-    path("logout/",logoutAccount,name="Logout"),
-    path("profile/",userProfile,name='profile-page'),
-    path("account/",user_account,name='user-account-page'),
-    path("set-nickname/",setNickname,name='Set_Nickname'),
-    path("update-profile/",updateProfile,name='Update_Profile'),
-    path("delete-profile/",deleteProfile,name='Delete_Profile'),
-    
-    path("verify-email/",verifyEmail,name='Email_Varification_Page'),
-    path("otp-conformation/",otpConformation,name='Email_OTP_Page'),
-    
-    #--------------------------------------------------------------------------
-        # Projects ---->>
-        
-    path("projects/",include("Projects.urls")),
-    
+    path("url-not-found/",url_not_found,name='url-not-found'),
 
-    #--------------------------------------------------------------------------
-        # Blogs ---->>
-        
-    path("blogs/",include("Blogs.urls")),
+    # --------------------------------------------------------------------------------------
+    #Users ---->>
     
+    path("create-account/",create_account,name="create-account-page"),
+    path("login/",login_account,name="login-account"),
+    path("logout/",logout_account,name="logout-account"),
+    path("profile/",user_profile,name='profile-page'),
+    path("account/",user_account,name='user-account-page'),
+    # path("set-nickname/",set_nickname,name='set-nickname'),
+    # path("update-profile/",update_profile,name='update-profile'),
+    path("delete-account/",delete_account,name='delete-account'),
     
-    #--------------------------------------------------------------------------
-        # APIs ---->>
-        
-    path("api/",include("API.urls"))
+    # path("verify-email/",verifyEmail,name='Email_Varification_Page'),
+    # path("otp-conformation/",otpConformation,name='Email_OTP_Page'),
+
+    #----------------------------------------------------------------------------------------
+    # Projects ---->>
+    path("projects/",include("Projects.urls")),
+
+    #----------------------------------------------------------------------------------------
+    # Blogs ---->>
+    # path("blogs/",include("Blogs.urls")),
+
+    # #--------------------------------------------------------------------------------------
+    # APIs ---->>
+    # path("api/",include("API.urls"))
 ]
 
-
-
-
 handler404=custom_404
+handler500 = custom_500

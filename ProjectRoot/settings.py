@@ -11,9 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from django.contrib.messages import constants as message_constants
+
 import os
 from dotenv import load_dotenv
-import dj_database_url
+# import dj_database_url
 
 import cloudinary
 import cloudinary.uploader
@@ -32,10 +34,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
-ALLOWED_HOSTS = ["*","apexsky.onrender.com"]
+ALLOWED_HOSTS = ["apexsky.onrender.com"]
 
 
 AUTH_USER_MODEL='Users.CustomUser'
@@ -65,6 +67,7 @@ INSTALLED_APPS += EXTERNAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -93,12 +96,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ProjectRoot.wsgi.application'
 
+MESSAGE_TAGS = {
+    message_constants.DEBUG: 'secondary',
+    message_constants.INFO: 'info',
+    message_constants.SUCCESS: 'success',
+    message_constants.WARNING: 'warning',
+    message_constants.ERROR: 'danger',
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+    # 'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
 
 cloudinary.config(
@@ -151,6 +165,7 @@ STATICFILES_DIRS=[
     BASE_DIR / 'static'
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Default primary key field type

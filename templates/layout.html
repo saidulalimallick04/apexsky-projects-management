@@ -5,19 +5,34 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
         <title>{% block page_title %}{% endblock page_title %} - ApexSky</title>
-        <!-- Bootstrap core CSS -->
-        <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
-        <!-- Additional CSS Files -->
+        <link rel="icon" href="{% static "favicon.ico" %}" type="image/x-icon" />
+
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" >
         <link rel="stylesheet" href="{% static "assets/css/fontawesome.css" %}">
-        <link rel="stylesheet" href="{% static "assets/css/templatemo-cyborg-gaming.css" %}">
+        
+        
+        <link rel="stylesheet" href="{% static "assets/css/apexsky-header-styles.css" %}">
+        <link rel="stylesheet" href="{% static "assets/css/apexsky-main-styles.css" %}">
+        <link rel="stylesheet" href="{% static "assets/css/apexsky-footer-styles.css" %}">
+        <link rel="stylesheet" href="{% static "assets/css/global-css-styles.css" %}">
+
         <link rel="stylesheet" href="{% static "assets/css/owl.css" %}">
         <link rel="stylesheet" href="{% static "assets/css/animate.css" %}">
-        <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+        {# Custom CSS Styles for ApexSky #}
+
+        {% block additional_styles %}
+        
+        {% endblock additional_styles %}
+        
+        {% comment %} 
+            <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+        {% endcomment %}
     </head>
     <body>
-        {% include "components/universal/loader.html" %}
+
+        {% include "components/primary-blocks/loader.html" %}   {#  javascript Loader  #}
 
         <!-- ***** Header Area Start ***** -->
         <header class="header-area header-sticky">
@@ -47,18 +62,22 @@
                                     <a href="{% url "explore-page" %}">Explore</a>
                                 </li>
                                 <li>
-                                    <a href="{% url "all-project-page" %}">Projects</a>
+                                    <a href="{% url "project-homepage" %}">Projects</a>
                                 </li>
                                 <li>
                                     <a href="{% url "new-project-page" %}">New</a>
                                 </li>
                                 <li>
+                                    <a href="{% url "search-page" %}">Search</a>
+                                </li>
+                                <li>
                                     {% if user.is_authenticated %}
-                                        <a href="{% url "profile-page" %}">Profile
-                                            <img src="{% static "assets/images/profile-header.jpg" %}" alt="">
+                                        <a href="{% url "profile-page" %}">{{request.user.username}}
+                                            <img src="https://res.cloudinary.com/content-storage/image/upload/v1752513474/{{user.profile_image}}" alt="{{request.user.first_name}} {{request.user.username}}">
                                         </a>
                                     {% else %}
-                                        <a href="{% url "login-page" %}">Login
+                                        <a href="{% url "login-account" %}">
+                                            Login
                                         </a>
                                     {% endif %}
                                     
@@ -74,22 +93,32 @@
             </div>
         </header>
         <!-- ***** Header Area End ***** -->
-        <div class="container">
+        
+        <!-- ***** Header Area Start ***** -->
+        <main class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    {# Page Contents #}
-                    {% block page_content_div %}{% endblock page_content_div %}
-                    {# Page Contents #}
+                    <div class="page-content">
+                        {% include "components/primary-blocks/alert.html" %}
+                        {# Page Contents #}
+                        {% block page_content_div %}{% endblock page_content_div %}
+                        {# Page Contents #}
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
+        <!-- ***** Header Area End ***** -->
+        
+        <!-- ***** Header Area End ***** -->
         <footer>
             <div class="container">
-                <div class="row">
+                <div class="row small">
                     <div class="col-lg-12">
-                        <p>Copyright © 2025
+                        <p >Copyright © 2025
                             <a href="#">ApexSky</a>
                             Company. All rights reserved.
+                        </p>
+                        <p class="small">
                             <br>Design:
                             <a href="https://templatemo.com" target="_blank" title="free CSS templates">TemplateMo</a>  Distributed By
                             <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
@@ -98,14 +127,22 @@
                 </div>
             </div>
         </footer>
+        <!-- ***** Header Area End ***** -->
+
         <!-- Scripts -->
-        <!-- Bootstrap core JavaScript -->
-        <script src="{% static "vendor/jquery/jquery.min.js" %}"></script>
         <script src="{% static "vendor/bootstrap/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "vendor/jquery/jquery.min.js" %}"></script> 
+        
+        <!-- Bootstrap core JavaScript (replace with CDN) -->
+        
         <script src="{% static "assets/js/isotope.min.js" %}"></script>
         <script src="{% static "assets/js/owl-carousel.js" %}"></script>
         <script src="{% static "assets/js/tabs.js" %}"></script>
-        <script src="{% static "assets/js/popup.js" %}"></script>
         <script src="{% static "assets/js/custom.js" %}"></script>
+        {% block additional_scripts %}
+        {% endblock additional_scripts %}
+
+        {% comment %} <script src="{% static "assets/js/popup.js" %}"></script> {% endcomment %}
+        
     </body>
 </html>

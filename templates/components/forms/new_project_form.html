@@ -1,0 +1,92 @@
+<div class="card col">
+    <div class="card-header">
+        <div class="h1 card-title">Add New Project</div>
+        <div class="card-category">
+            New Project!!
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form class="justify-content-center" method="post" action="{% url "new-project-page" %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="col-md-6 ms-auto me-auto text-center">
+                <label for="project-image" class="form-label">Project Thumbnail Image</label>
+                <div class="col-md-6 ms-auto me-auto mb-3">
+                    <img id="image-preview" class="img-fluid rounded border" style="max-width: 300px; display: none;" alt="Image Preview">
+                </div>
+                <input type="file" class="form-control" id="project-image" name="project_image" accept="image/*">
+            </div>
+            <div class="row mb-3 mt-3">
+                <div class="col-md-6">
+                    <label for="projectName" class="form-label">Project Name</label>
+                    <input type="text" class="form-control" id="projectName" name="project_name" placeholder="Enter Project Name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="projectStatus" class="form-label">Project Status:</label>
+                    <select class="form-control" id="projectStatus" name="project_status" required>
+                        <option selected disabled>Choose...</option>
+                        <option value="Comming Soon">Comming Soon</option>
+                        <option value="Still Working">Incomplete (Live)</option>
+                        <option value="Completed">Completed (Not Live)</option>
+                        <option value="Live">Live</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="about-project" class="form-label">Project Content: <small>(max.length 500)</small></label>
+                <textarea type="text" class="form-control" id="about-project" name="project_content"></textarea>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="catalog" class="form-label">Catalog/Catagory: </label>
+                    <select class="form-control" id="catalog" name="project_catalog_id" required>
+                        <option selected disabled>Choose Catalog...</option>
+                        {% for id,name in allCatalogs %}
+                            <option value="{{id}}">{{name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="label" class="form-label">Label:</label>
+                    <select class="form-control" id="label" name="project_label_id" required>
+                        <option selected disabled>Choose label...</option>
+                        {% for id, name in allLabel %}
+                            <option value="{{id}}">{{name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="col-md-6 ms-auto me-auto text-center">
+                <label for="project-image" class="form-label">Project Document File</label>
+                <input type="file" class="form-control" id="project-image" name="project_image" accept=".pdf,.doc,.docx,.txt,.xls,.xlsx">
+            </div>
+
+            <div class="mb-3 mt-3">
+                <label for="deployed-url" class="form-label">Deployed URL:</label>
+                <input type="url" class="form-control" id="deployed-url" name="deployed_url" placeholder="https://www.example.com">
+            </div>
+
+            <div class="mb-3 mt-3">
+                <label for="demo-video-url" class="form-label"> Demo Video(eg. Youtube) URL:</label>
+                <input type="url" class="form-control" id="demo-video-url" name="demo_video_url" placeholder="Demo Video Link">
+            </div>
+
+            <div class="mb-3">
+                <label for="github-url" class="form-label">GitHub URL:</label>
+                <input type="url" class="form-control" id="github-url" name="github_url" placeholder="https://github.com/username/project_name">
+            </div>
+
+            <div class="card-action d-flex gap-2">
+                <button type="submit" class="btn btn-success rounded-pill col">Add Project</button>
+                <a href="{% url "landing-page" %}" class="btn btn-danger">Cancel</a>
+            </div>
+        </form>        
+    </div>
+
+    <div class="card-footer">
+        
+    </div>
+</div>

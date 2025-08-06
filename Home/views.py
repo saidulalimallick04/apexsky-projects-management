@@ -1,66 +1,83 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,resolve_url
 from django.contrib import messages
-from Projects.models import ProjectCategory,ProjectLabel,ProjectDetail
-from .models import HeroSectionImage
 
+from Projects.models import ProjectCatalog, ProjectLabel, Project
 from django.contrib.auth import get_user_model
-Users=get_user_model()
+
 # Create your views here.
 
+Users=get_user_model()
+
+#--------------------------------------------------------------------------------------------------------------------------------
 def home_page(request):
-    
+    """
+        This Function return the Home Page or Landing Page.\n
+        Context Values: [ popularProjects(QUERYSET), upCommingProjects(QUERYSET), projectCatalogs(QUERYSET) ]
+    """
     try:
-        
-        popularProjects = ProjectDetail.objects.filter(is_verified = True).order_by("-project_use_count")[:8]
-        
-        upCommingProjects=ProjectDetail.objects.filter(project_status='Comming Soon').order_by("-id")[:4]
-        
-        projectCatalogs = ProjectCategory.objects.all()
+        randomProjects = Project.objects.filter(is_verified = True).order_by("?")[:8]
+        upCommingProjects=Project.objects.filter(status='Comming Soon').order_by("?")[:4]
+        projectCatalogs = ProjectCatalog.objects.order_by("?")
         
         context={
-            "popularProjects" : popularProjects,
+            "randomProjects" : randomProjects,
             'upCommingProjects': upCommingProjects,
             'projectCatalogs' : projectCatalogs,
         }
-        return render(request, "home/index2.html",context)
+        return render(request, "home/index.html",context)
     
     except Exception as e:
         print("Error: ", e)
-        return render(request, "home/index2.html")
+        return render(request, "home/index.html")
 
-
+#--------------------------------------------------------------------------------------------------------------------------------
 def explore_page(request):
+    """
+        This Function return Explore Page. This page shows all functionality of our platform.\n
+        ContextValues: [  ]
+    """
+    new_live_projects = Project.objects.filter(status = 'Live').order_by("?")[:8]
+    top_5_labels = ProjectLabel.objects.all() [:5] 
     
-    return render(request=request, template_name="home/explore_page.html")
+
+    context = {
+        "new_live_projects" : new_live_projects,
+        "top_5_labels" : top_5_labels,
+
+    }
+
+    return render(request=request, template_name="home/explore_page.html",context=context)
 
 
-def urlNotFound(request):
-    
+#--------------------------------------------------------------------------------------------------------------------------------
+def url_not_found(request):
+    """
+        When the project/event does not have a Deployed/GitHub URL.\n
+        Context Values: [  ]
+    """
     messages.info(request, 'Url Not Found')
-    return redirect("/")
+    return redirect(resolve_url("landing-page"))
 
 
-
+#--------------------------------------------------------------------------------------------------------------------------------
 def search_page(request):
+    """
+        This is the Search Page.\n
+        Context Values: [ Users(QUERYSET), Catalogs(QUERYSET), Projects(QUERYSET) ]
+    """
+    keyword=request.GET.get('searchKeyword')
+    if not keyword:
+        return render(request, "home/search_page.html")
+    users_QUERYSET=Users.objects.filter(username__icontains = keyword)[0:4]
+    category_QUERYSET=ProjectCatalog.objects.filter(name__icontains = keyword)[0:4]
+    projects_QUERYSET=Project.objects.filter(name__icontains = keyword)[0:4]
     
-    if request.method== "GET":
+    context={
         
-        qurey=request.GET.get('query')
-        
-        Users_QUERYSET=Users.objects.filter(nickname__icontains=qurey)[0:4]
-        Category_QUERYSET=ProjectCategory.objects.filter(category_name__icontains=qurey)[0:4]
-        Projects_QUERYSET=ProjectDetail.objects.filter(project_name__icontains=qurey)[0:4]
-        
-        All_index=['Users','Categories','Projects']
-        Data=[Users_QUERYSET,Category_QUERYSET,Projects_QUERYSET]
-        
-        All=zip(All_index,Data)
-        
-        context={
-            "All":All,
-            "Users":Users_QUERYSET,
-            "Categories":Category_QUERYSET,
-            "Projects":Projects_QUERYSET,
-            "QUERY":qurey,
-        }
-        return render(request, 'home/search_page.html',context)
+        "Users":users_QUERYSET,
+        "Catalogs":category_QUERYSET,
+        "Projects":projects_QUERYSET,
+        "searchKeyword":keyword,
+    }
+    return render(request, 'home/search_page.html',context)
+#--------------------------------------------------------------------------------------------------------------------------------
