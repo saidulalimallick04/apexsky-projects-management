@@ -1,48 +1,52 @@
 from django.conf import settings
+from django.core.mail import send_mail
 import random
-import smtplib
-from email.message import EmailMessage
 
+from .models import OtpData
 from django.contrib.auth import get_user_model
 User=get_user_model()
 
 
-def send_otp_email(request):   
-    
-    otp=''
-    for i in range(6):
-        otp+=str(random.randint(0,9))
+def send_otp_email(user_name: str, user_email: str, OTP: int | str) -> int:   
+
+    message_content = f"""Dear {user_name},
+        Your code for ApexSky Projects Management is: 
+        CODE: {OTP}
         
-    User.objects.filter(email=request.user.email).update(user_ott=otp)
-    
-    server=smtplib.SMTP('smtp.gmail.com',587)
-    server.starttls()
-    ourEmail=settings.EMAIL_HOST_USER
-    ourPass=settings.EMAIL_HOST_PASSWORD
-    server.login(ourEmail,ourPass)
-    
-    msg=EmailMessage()
-    
-    msg['Subject']= 'ApexSky - Sign in'
-    
-    msg['From']= ourEmail
-    
-    msg['To']= request.user.email
-    
-    msg.set_content(f"""\
-                    Dear {request.user.first_name},
+        Keep it private and do not share it.
+        If this request was not made by you, simply ignore this email.
 
-                    Your code for ApexSky Projects Management is: 
+        Well Wishes,
+        Developer Sami(APEXSKY)
+        """
+    print("-----------Hello from send_otp_email, Sending.......")
+    send_mail(
+        subject= "[Development OTP] ApexSky Sign-in code",
+        message=message_content,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list= [user_email],
+        fail_silently= False
+    )
+    return
 
-                    🔢 {otp}
-
-                    Keep it private and do not share it.
-
-                    If this request was not made by you, simply ignore this email.
-
-                    Best,  
-                    ApexSky
-                    """)
+# To generate OTP for Verification.
+def send_otp_code(user_email: str, username: str):
+    OTP = str(random.randint(111111, 999999))
     
-    server.send_message(msg)
-    return "Check Your Mail!!"
+    OtpData.objects.update_or_create(email = user_email,defaults={'otp':OTP})
+    send_otp_email(username, user_email, OTP)
+
+
+# To hide unique part of email 
+def hide_and_seek_email(user_email: str) -> str:
+    
+    secure_email = user_email
+    
+    return secure_email
+
+
+# Split the email first part for temp username.
+def username_extract(email: str) -> str:
+    username = email.split('@')[0]
+    
+    return username

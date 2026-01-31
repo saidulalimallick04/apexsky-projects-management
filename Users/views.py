@@ -4,10 +4,10 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 
-from django.db.models import Count
-
 from django.contrib.auth import get_user_model
 from Projects.models import Project
+from .models import OtpData
+from .utils import send_otp_code
 # Create your views here.
 
 User=get_user_model()
@@ -19,7 +19,6 @@ def login_account(request):
         Context Values: [  ]
     """
     next_url=request.GET.get('next','/')
-    print(next_url)
     if request.method=='POST':
         data=request.POST
         
@@ -60,7 +59,7 @@ def create_account(request):
             
         except Exception as e:
             print("Error: ",e)
-        
+        print(data)
         print("\n----------Data Accepted----------\n")
         
         try:
@@ -133,8 +132,10 @@ def logout_account(request):
 @login_required(login_url="/login/")
 def user_profile(request):
     """
+    Descriptions:
+    --
         This finction is for User Profile Page.\n
-        Context Values: []
+        Context Values: [userProjects, total_project_count, live_project_count, verified_project_count]
     """
     userProjects = Project.objects.filter(user = request.user).order_by('?')[:4]
     total_project = Project.objects.filter(user = request.user)
@@ -153,7 +154,7 @@ def user_profile(request):
     return render(request, 'users/user_profile_page.html',context)
 
 # #-----------------------------------------------------------------------------------------------------------------------------------------
-
+@login_required(login_url="/login/")
 def user_account(request):
     """
         This Function returns User Account Details Page.\n
@@ -162,47 +163,88 @@ def user_account(request):
     return render(request,"users/user_account_page.html")
 
 
-# #-----------------------------------------------------------------------------------------------------------------------------------------
-# @login_required(login_url='/login/')
-# def verify_email(request):
-    
-#     if request.user.is_verified:
-#         return redirect('/profile')
-    
-#     if request.method == "POST":
-#         if 'SendEmail' in request.POST:
-#             try: 
-#                 messages.info(request,send_otp_email(request))
-#                 return redirect('/otpconformation/')
-#             except:
-#                 messages.info(request, "Something wrong!!")
-            
-#     return render(request, 'users/verify_email_page.html')
+#-----------------------------------------------------------------------------------------------------------------------------------------
+@login_required(login_url="/login/")
+def choose_verifiable_email(request):
+    """
+    Descriptions:
+    --
+        In This function we will choose that email which we will verify.
+    """
 
-# def resetPassword(request):
-    
-#     return render(request,'users/otp_conformation_page.html')
-
-# #-----------------------------------------------------------------------------------------------------------------------------------------
-# @login_required(login_url='/login/')
-# def otp_conformation(request):
-    
-#     if 'OTP_SUBMISSION' in request.POST:
-#         data=request.POST
-
-#         userInput=data.get('OTP')
-#         otp=User.objects.get(email=request.user.email).user_ott
+    if request.method == 'POST':
+        try:
+            send_otp_code(user_email=request.user.email, username=request.user.first_name)
+            messages.success(request, "Email Send. Check Your Email Inbox!!(If can't found try spam Box!!)")
+            return redirect(resolve_url("verify-email-page"))
+        except:
+            messages.error(request, "Email Can't Send Right Now. Try Again Later!!")
+            return redirect(resolve_url("profile-page"))
         
-#         if otp==userInput:
-#             User.objects.filter(email=request.user.email).update(is_verified=True)
-#             User.objects.filter(email=request.user.email).update(user_ott='')
-#             messages.info(request, "Verified ^_^")
-#             return redirect('/profile/')
-#         else:
-#             messages.info(request, "Invaild OTP")
-#             return render(request, 'users/verify_email_page.html')
+    else:
+        messages.info(request, "Choose One Email")
+        return render(request, "users/verification_email_choose_page.html")
+
+#-----------------------------------------------------------------------------------------------------------------------------------------
+@login_required(login_url='/login/')
+def verify_email(request):
+    """
+    Descriptions:
+    --
+        This function will verify Emaill address
+    """
+    if request.method == 'POST':
+        data = request.POST
+        input_otp = data.get("OTP")
+
+        OTP_query = OtpData.objects.get(email = request.user.email)
+        if not OTP_query:
+            messages.error(request=request, message="Something went Wrong!! Try again later!!")
+            return redirect(resolve_url("profile-page"))
+        
+        if input_otp == OTP_query.otp:
+            OTP_query.delete()
+            User.objects.filter(unique_identifier = request.user.unique_identifier).update(is_verified = True)
+            messages.success(request, f"Email({request.user.email}) Verified!!")
+            return redirect(resolve_url("profile-page"))
+        else:
+            messages.error(request, "Invalid OTP!! Try again.")
+            return render(request, "users/verify_email_page.html")
+    else:
+        return render(request, "users/verify_email_page.html")
+
+#------------------------------------------------------------------------------------------------------------
+def resetPassword(request):
+    """
+        This Function Will help to reset password.
+    """
+    return render(request,'users/otp_confirmation_page.html')
+
+# #-----------------------------------------------------------------------------------------------------------------------------------------
+@login_required(login_url='/login/')
+def otp_confirmation(request):
+    """
+    Descriptions:
+    -- 
+        This 
+    """
+    
+    if 'OTP_SUBMISSION' in request.POST:
+        data=request.POST
+
+        userInput=data.get('OTP')
+        otp=User.objects.get(email=request.user.email).user_ott
+        
+        if otp==userInput:
+            User.objects.filter(email=request.user.email).update(is_verified=True)
+            User.objects.filter(email=request.user.email).update(user_ott='')
+            messages.info(request, "Verified ^_^")
+            return redirect('/profile/')
+        else:
+            messages.info(request, "Invaild OTP")
+            return render(request, 'users/verify_email_page.html')
                 
-#     return render(request,'users/otp_conformation_page.html')
+    return render(request,'users/otp_conformation_page.html')
 
 # #--------------------------------------------------------------------------------------------------------------------------------
 # @login_required(login_url='/login/')
@@ -250,7 +292,7 @@ def delete_account(request):
         Be sure!! This Function delete Current user's entire Details from database.
     """
     try:    
-        User.objects.get(uid=request.user.uid).delete()
+        User.objects.get(unique_identifier=request.user.unique_identifier).delete()
         messages.info(request, "Deleted")
     except:
         messages.info(request,"Already Deleted")    

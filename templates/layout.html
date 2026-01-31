@@ -8,7 +8,7 @@
         <title>{% block page_title %}{% endblock page_title %} - ApexSky</title>
         <link rel="icon" href="{% static "favicon.ico" %}" type="image/x-icon" />
 
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        {% comment %} <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> {% endcomment %}
         <link rel="stylesheet" href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" >
         <link rel="stylesheet" href="{% static "assets/css/fontawesome.css" %}">
         
@@ -32,7 +32,7 @@
     </head>
     <body>
 
-        {% include "components/primary-blocks/loader.html" %}   {#  javascript Loader  #}
+        {% comment %} {% include "components/primary-blocks/loader.html" %}   {#  javascript Loader  #} {% endcomment %}
 
         <!-- ***** Header Area Start ***** -->
         <header class="header-area header-sticky">
@@ -73,7 +73,7 @@
                                 <li>
                                     {% if user.is_authenticated %}
                                         <a href="{% url "profile-page" %}">{{request.user.username}}
-                                            <img src="https://res.cloudinary.com/content-storage/image/upload/v1752513474/{{user.profile_image}}" alt="{{request.user.first_name}} {{request.user.username}}">
+                                            <img src="{% if request.user.profile_image %}https://res.cloudinary.com/content-storage/image/upload/c_thumb,h_50,w_50/{{request.user.profile_image}}{% else %}https://res.cloudinary.com/content-storage/image/upload/v1754682972/w_1000/q_auto/f_auto/Screenshot_2024-07-17-20-19-15-358_com.instagram.android_vgyjqn.jpg{% endif %}" alt="{{request.user.first_name}} {{request.user.username}}">
                                         </a>
                                     {% else %}
                                         <a href="{% url "login-account" %}">
@@ -100,6 +100,7 @@
                 <div class="col-lg-12">
                     <div class="page-content">
                         {% include "components/primary-blocks/alert.html" %}
+                        
                         {# Page Contents #}
                         {% block page_content_div %}{% endblock page_content_div %}
                         {# Page Contents #}
@@ -111,6 +112,7 @@
         
         <!-- ***** Header Area End ***** -->
         <footer>
+            {% include "components/about_apexsky_project.html" %}
             <div class="container">
                 <div class="row small">
                     <div class="col-lg-12">

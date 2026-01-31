@@ -41,15 +41,17 @@ urlpatterns = [
     path("create-account/",create_account,name="create-account-page"),
     path("login/",login_account,name="login-account"),
     path("logout/",logout_account,name="logout-account"),
+
     path("profile/",user_profile,name='profile-page'),
     path("account/",user_account,name='user-account-page'),
+
     # path("set-nickname/",set_nickname,name='set-nickname'),
     # path("update-profile/",update_profile,name='update-profile'),
-    path("delete-account/",delete_account,name='delete-account'),
-    
-    # path("verify-email/",verifyEmail,name='Email_Varification_Page'),
-    # path("otp-conformation/",otpConformation,name='Email_OTP_Page'),
 
+    path("choose-email/",choose_verifiable_email,name='choose_verifiable_email_page'),
+    path("verify-email/",verify_email,name='verify-email-page'),
+
+    path("delete-account/",delete_account,name='delete-account'),
     #----------------------------------------------------------------------------------------
     # Projects ---->>
     path("projects/",include("Projects.urls")),
@@ -60,7 +62,7 @@ urlpatterns = [
 
     # #--------------------------------------------------------------------------------------
     # APIs ---->>
-    # path("api/",include("API.urls"))
+    path("api/",include("API.urls"))
 ]
 
 handler404=custom_404

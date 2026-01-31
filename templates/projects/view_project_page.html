@@ -1,121 +1,90 @@
 {% extends "layout.html" %}
 
-{% block Title %}{% endblock %}
+{% block page_title %}{{project.handle}}{% endblock page_title %}
 
-
-{% block CustomCSS %}
-
-main {
-    background-color:rgb(55, 105, 107); /* Custom Background Color */
-    color: white;
-}
-.overview-section {
-    padding: 60px 0;
-}
-.overview-content h2 {
-    font-weight: bold;
-}
-
-.info-box {
-    background: white;
-    color: black;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-.info-box h3 {
-    color: #5f9ea0;
-    font-weight: bold;
-}
-
-{% endblock CustomCSS %}
-
-
-
-<!---------------------------------------------------------->
+{% block additional_styles %}{% endblock additional_styles %}
 
 {% block page_content_div %}
 
-<div class="d-flex p-5 justify-content-between align-item-center">
-    <span class="border border-warning-subtle p-5"><strong>Intrest Count: </strong> {{project.project_use_count}}</span>
-    <span class="border border-warning-subtle p-5"><strong>Category: </strong> {{project.category}}</span>
-    <span class="border border-warning-subtle p-5"><strong>Status: </strong>{{project.project_status}}</span>
-
-</div>
-<section class="overview-section text-center">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Project : Image -->
-            <div class="col-md-6" style="object-fit: cover;">
-                <img src="{{project.project_external_image}}" class="img-fluid rounded" style="object-fit: cover;"  alt="Product Image">
-            </div>
-            <!-- Right Side: Details -->
-            <div class="col-md-6 overview-content text-start">
-                <h2>{{project.project_name}}</h2>
-                <p>{{project.project_description}}</p>
-
-                <a href="{{project.project_url}}" class="btn btn-primary" target="_blank">Project Page</a>
-
-                {% if request.user.is_verified %}
-                <a href="{{project.project_github_repo}}" class="btn btn-primary" target="_blank">Github Repository</a>
-                {% else %}
-
-                <button type="button" class="btn btn-primary" id="liveToastBtn">Show Repository</button>
-
-                <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                    <div id="liveToast" class="toast bg-dark" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <strong class="me-auto">Login Required</strong>
-                            <small>Only users can access</small>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            Login First!!
-                        </div>
-                </div>
-                </div>
-                {% endif %}
-                <br>
-                {% if project.user == user %}
-                    <a href="{%url 'Update_Project' project.id %}" class="btn mt-3 btn-secondary" target="_blank">Edit Project Details</a>
-                {% endif %}
-            </div>
+<div class="game-details">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>{{project.name}}</h2>
         </div>
+        <div class="col-lg-12">
+            <div class="content">
+                <div class="row">
 
-        <!-- Three Info Boxes -->
-        <div class="row mt-5">
-            <div class="col-md-4">
-                <div class="mt-2 info-box text-center">
-                    <h3>01</h3>
-                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</p>
-                </div>
-            </div>
-            <div class="mt-2 col-md-4">
-                <div class="info-box text-center">
-                    <h3>02</h3>
-                    <p>Exceptuer sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.</p>
-                </div>
-            </div>
-            <div class="mt-2 col-md-4">
-                <div class="info-box text-center">
-                    <h3>03</h3>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+                    <div class="col-lg-12 mt-3 mb-3">
+                        <p>{{project.content}}</p>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="left-info">
+                            <div class="left">
+                                <h4>{{project.handle}}</h4>
+                                <span>{{project.user_username}}</span>
+                            </div>
+                            <ul>
+                                <li><i class="fa fa-user"></i> {{project.view_count}}</li>
+                                <li>
+                                Status: 
+                                    {% if project.is_verified %}
+                                        <i class="fa-regular fa-circle-check"></i> 
+                                    {% else %}
+                                        <i class="fa-regular fa-circle-xmark"></i>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="right-info">
+                            <ul>
+                                <li><a href="{% url "view-catalog" reqested_Project_catalog.1 %}"><i class="fa-brands fa-font-awesome"></i> {{reqested_Project_catalog.0}}</a></li>
+                                <li><a href="{% url "view-label" reqested_Project_label.1 %}"><i class="fa-solid fa-tag"></i> {{reqested_Project_label.0}}</a></li>
+                                
+                                {% if project.deployed_url %}
+                                    <li><a href="{{project.deployed_url}}"><i class="fa fa-server"></i> Open Site</a></li>
+                                {% else %}
+                                    <li><i class="fa fa-server"></i> No URL Found</li>
+                                {% endif %}
+
+
+                                {% if project.github_repository %}
+                                    <li><a href="{{project.github_repository}}"><i class="fa-brands fa-github"></i> GitHub</a></li>
+                                {% else %}
+                                    <li><i class="fa-brands fa-github"></i> No URL Found</li>
+                                {% endif %}
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <img src="{% if project.thumbnail_image %}https://res.cloudinary.com/content-storage/image/upload/w_1000/q_auto/f_auto/{{project.thumbnail_image}}{% else %}https://res.cloudinary.com/content-storage/image/upload/v1754682972/w_1000/q_auto/f_auto/Screenshot_2024-07-17-20-19-15-358_com.instagram.android_vgyjqn.jpg{% endif %}" alt=""
+                            style="border-radius: 23px;">
+                    </div>
+                    <div class="col-lg-4">
+                        <img src="https://images.unsplash.com/photo-1754630551378-e1ecffe9da6b?q=80&w=1166&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""
+                            style="border-radius: 23px;">
+                    </div>
+                    <div class="col-lg-4">
+                        <img src="https://images.unsplash.com/photo-1754630551378-e1ecffe9da6b?q=80&w=1166&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""
+                            style="border-radius: 23px;">
+                    </div>
+                    
+                    <div class="col-lg-12">
+                        <div class="main-border-button">
+                            <a href="{{ project.document_file.url}}" download="{{project.name}}.pdf" target="_blank">Download Document</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
-
-<script>
-    const toastTrigger = document.getElementById('liveToastBtn')
-const toastLiveExample = document.getElementById('liveToast')
-
-if (toastTrigger) {
-    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-    toastTrigger.addEventListener('click', () => {
-    toastBootstrap.show()
-})
-}
-</script>
+</div>
 
 {% endblock page_content_div %}
+
+{% block additional_scripts %}{% endblock additional_scripts %}

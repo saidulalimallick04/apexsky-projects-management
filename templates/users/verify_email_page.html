@@ -1,32 +1,42 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
+
+{% block page_title %}Enter OTP{% endblock page_title %}
+
+{% block additional_styles %}{% endblock additional_styles %}
+
+{% block page_content_div %}
 
 
-{% block PageTitle %}Verify Email{% endblock PageTitle %}
-
-
-{% block MainDiv %}
-
-<div class="fs-5 d-flex align-items-center justify-content-center ">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 ">
-                <div class="card shadow-lg">
-                    <div class="card-body">
-                        <h3 class="text-center mb-4">Verify Your Account to Heavenly Bytes</h3>
-
-                        <div class="mb-3">
-                            <label for="Email" class="form-label"><strong>Email:</strong></label>
-                            {{request.user.email}}
-                            <form method="post">
-                                {% csrf_token %}
-                                <button name="SendEmail" type="submit" class="btn btn-primary">Send Mail</button>
-                            </form>
-                        </div>
-                        
-                    </div>
-                </div>
+<div class="row text-white p2 col-md-6 ms-auto me-auto">
+        <div class="card-header">
+            <div class="h1 card-title">Enter OTP</div>
+            <div class="card-category">
+                Be a Verified ApexSky User!!
             </div>
         </div>
+
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group mt-5">
+                    <label for="email-address"> Email Address </label>
+                    <input type="email" class="form-control" id="email-address" value="{{request.user.email}}" readonly/>
+                </div>
+                <div class="form-group mt-5">
+                    <label for="OTP"> OTP</label>
+                    <input type="text" class="form-control" id="otp" name="OTP" placeholder="Enter OTP" required/>
+                </div>
+                <div class="card-action d-flex gap-2 mt-5">
+                    <button type="submit" class="btn btn-success col">Submit</button>
+                    <a href="{% url "profile-page" %}" class="btn btn-danger col">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-footer">
+            
+        </div>
     </div>
-</div>
-{% endblock MainDiv %}
+{% endblock page_content_div %}
+
+{% block additional_scripts %}{% endblock additional_scripts %}

@@ -7,22 +7,25 @@
 {% load static %}
 
 {% block page_content_div %}
-
+    {% if request.user.is_verified == 0 %}
+        {% include "components/primary-blocks/not_verified_alert.html" %}
+    {% endif %}
+    
     <!-- ***** Banner Start ***** -->
     <div class="row">
         <div class="col-lg-12">
             <div class="main-profile ">
                 <div class="row">
                     <div class="col-lg-4">
-                        <img src="https://res.cloudinary.com/content-storage/image/upload/w_1000/q_auto/f_auto/{{request.user.profile_image}}" alt="{{request.user.first_name}} {{request.user.last_name}}" style="border-radius: 23px;">
+                        <img src="{% if request.user.profile_image %}https://res.cloudinary.com/content-storage/image/upload/w_1000/q_auto/f_auto/{{request.user.profile_image}}{% else %}https://res.cloudinary.com/content-storage/image/upload/v1754682972/w_1000/q_auto/f_auto/Screenshot_2024-07-17-20-19-15-358_com.instagram.android_vgyjqn.jpg{% endif %}" alt="{{request.user.first_name}} {{request.user.last_name}}" style="border-radius: 23px;">
                     </div>
                     <div class="col-lg-4 align-self-center">
                         <div class="main-info header-text">
                             <span>{{request.user.username}}</span>
-                            <h4>{% if request.user.first_name %}{{request.user.first_name}} {{request.user.last_name}} {% else %} Your Name{% endif %}</h4>
+                            <h4>{% if request.user.first_name %}{{request.user.first_name}} {{request.user.last_name}} {% else %} Your Name Here {% endif %}</h4>
                             <p>{{request.user.about_me}}</p>
                             <div class="main-border-button">
-                                <a href="{% url "new-project-page" %}">Add New Project</a>
+                                <i class="fa fa-eye"></i><a href="{% url "new-project-page" %}">Add New Project</a>
                             </div>
                         </div>
                     </div>
@@ -44,22 +47,26 @@
                                         <h4><em>Your Popular</em> Projects</h4>
                                     </div>
                                 </div>
-                                    {% for project in userProjects %}
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="item">
-                                                <div class="thumb">
-                                                    <img src="https://res.cloudinary.com/content-storage/image/upload/w_1000/q_auto/f_auto/{{project.thumbnail_image}}" alt="{{project.name}}"
-                                                        style="border-radius: 23px; height: 150px; ">
-                                                    <a href="#"
-                                                        target="_blank"><i class="fa fa-eye"></i></a>
-                                                </div>
-                                                <div class="down-content">
-                                                    <h4>{{project.name| truncatechars:15}}</h4>
-                                                    <span><i class="fa fa-eye"></i> {{project.use_count}}</span>
-                                                </div>
+                                {% for project in userProjects %}
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="item">
+                                            <div class="thumb">
+                                                <img src="https://res.cloudinary.com/content-storage/image/upload/w_1000/q_auto/f_auto/{{project.thumbnail_image}}" alt="{{project.name}}"
+                                                    style="border-radius: 23px; height: 150px; ">
+                                                <a href="{% url "view-project" project.handle %}">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </div>
+                                            <div class="down-content">
+                                                <h4>{{project.name| truncatechars:15}}</h4>
+                                                <span><i class="fa fa-eye" ></i> {{project.view_count}}</span>
                                             </div>
                                         </div>
-                                    {% endfor %}
+                                    </div>
+                                    
+                                {% empty %}
+                                    <p>No Project Found</p>
+                                {% endfor %}
                                 <div class="col-lg-12">
                                     <div class="main-button">
                                         <a href="#">See All Projects</a>

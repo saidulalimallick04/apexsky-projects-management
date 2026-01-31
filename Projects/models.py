@@ -89,14 +89,16 @@ class ProjectLabel(models.Model):
 #------------------------------------------------------------------------------------------------------
 
 class Project(models.Model):
-    '''
+    """
+    Description:
+    ---
     This Store project data.
-    '''
+    """
     user = models.ForeignKey(User,
                         related_name= "User",
                         on_delete = models.CASCADE,
                         default = None)
-    category = models.ForeignKey(ProjectCatalog,
+    catalog = models.ForeignKey(ProjectCatalog,
                         related_name = "ProjectCatalog",
                         on_delete = models.SET_DEFAULT,
                         default = None)
@@ -122,7 +124,7 @@ class Project(models.Model):
                         blank = True)
     user_username = models.CharField(
                         max_length = 30)
-    use_count = models.IntegerField(   
+    view_count = models.IntegerField(   
                         default = 0)
     creation_date = models.DateField(
                         auto_now_add = True)
@@ -130,8 +132,13 @@ class Project(models.Model):
                         auto_now = True)
     status = models.CharField(
                         default = 'Comming Soon')
-    is_verified = models.BooleanField(verbose_name=("Verification Status(True/False)"),
+    is_verified = models.BooleanField(verbose_name=("Verification Status"),
                         default = False)
+    is_unique = models.BooleanField(verbose_name=("Unique Project"),
+                        default = False)
+    user_liked = models.ManyToManyField("Users.CustomUser",
+                        verbose_name=("Likes"),
+                        through="Projects.ProjectLike")
     
     framework = models.CharField(
                         max_length = 25,
@@ -184,4 +191,19 @@ class Project(models.Model):
     def save(self, *args, **kwargs):
         self.set_handle()
         super().save(*args, **kwargs)
+
 #------------------------------------------------------------------------------------------------------
+class ProjectLike(models.Model):
+
+    project = models.ForeignKey(Project,
+                    verbose_name=("Project"),
+                    on_delete=models.CASCADE)
+
+    user = models.ForeignKey("Users.CustomUser",
+                    verbose_name=("User"),
+                    on_delete=models.CASCADE)
+    
+    time_stamp = models.DateTimeField(verbose_name=("Liked Date&Time"),
+                    auto_now_add=True)
+    class Meta:
+        unique_together = ("project", "user")

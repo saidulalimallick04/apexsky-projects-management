@@ -1,0 +1,22 @@
+<div class="card-body">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group mt-5">
+            <label for="email-address">
+                <i class="far fa-envelope"></i>&emsp13; Email Address
+            </label>
+            <input type="email" class="form-control" id="email-address" name="login_email_address" placeholder="Enter Email" required/>
+            {% comment %} <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else. <a href="{% url "forget_email_page" %}">Forgot Email?</a></small> {% endcomment %}
+        </div>
+        <div class="form-group mt-5">
+            <label for="password"><i class="fas fa-key"></i>&emsp13; Password</label>
+            <input type="password" class="form-control" id="password" name="login_password" placeholder="Enter Password" required/>
+            {% comment %} <small id="passwordHelp" class="form-text text-muted">Never share your password with anyone. <a href="{% url "forget_password_page" %}">Forgot Password?</a></small> {% endcomment %}
+        </div>
+        <p class="text-end">Don't have an account? <a href="{% url "create-account-page" %}">Sign up</a></p>
+        <div class="card-action d-flex gap-2 mt-5">
+            <button type="submit" class="btn btn-success col">Submit</button>
+            <a href="{% url "landing-page" %}" class="btn btn-danger col">Cancel</a>
+        </div>
+    </form>
+</div>

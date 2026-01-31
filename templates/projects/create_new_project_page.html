@@ -6,7 +6,21 @@
 
 {% block page_content_div %}
 
-    {% include "components/forms/new_project_form.html" %}
+    <div class="row text-white ps-2 pe-2">
+        <div class="card-header">
+            <div class="h1 card-title">Add New Project</div>
+            <div class="card-category">
+                New Project!!
+            </div>
+        </div>
+
+        {# Add form as "class-body" here #}
+        {% include "components/forms/new_project_form.html" %}
+        
+        <div class="card-footer">
+        Never share password and other secrets with anyone.
+        </div>
+    </div>
 
 {% endblock page_content_div %}
 
